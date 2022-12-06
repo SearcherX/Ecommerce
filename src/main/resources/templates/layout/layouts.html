@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="common_head(title)">
+    <meta charset="UTF-8">
+    <title th:replace="${title}">Webshop</title>
+    <link rel="stylesheet" type="text/css" th:href="@{webjars/bootstrap/5.2.2/dist/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<header th:fragment="menu" class="sticky-top">
+    <div class="container-fluid px-5 py-2">
+        <div class="row">
+            <div class="col-6">
+                <ul class="nav d-flex justify-content-start">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Товары</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Услуги</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-6">
+                <ul class="nav d-flex justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Помощь</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Личный кабинет
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li sec:authorize="isAnonymous()"><a th:href="@{/login}" class="dropdown-item">Войти</a>
+                            </li>
+                            <li sec:authorize="isAnonymous()"><a th:href="@{/register}" class="dropdown-item">Регистрация</a>
+                            </li>
+
+                            <li sec:authorize="isAuthenticated()"><a href="#" class="dropdown-item">Корзина</a></li>
+                            <li sec:authorize="isAuthenticated()"><a href="#" class="dropdown-item">Настройки</a></li>
+                            <li sec:authorize="isAuthenticated()">
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="dropdown-item">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+</body>
+</html>

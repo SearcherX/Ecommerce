@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+    <title>Login</title>
+</head>
+<body>
+<header th:replace="~{layout/layouts.html :: menu}"></header>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <form th:action="@{/login}" method="post">
+                <h1 class="display-4 text-center">Авторизация</h1>
+
+                <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
+                <div class="col-12 py-1">
+                    <label for="inputUsername" class="form-label">Логин:</label>
+                    <input class="form-control" id="inputUsername" type="text" name="username">
+                </div>
+                <div class="col-12 py-1">
+                    <label for="inputPassword" class="form-label">Пароль:</label>
+                    <input class="form-control" id="inputPassword" type="password" name="password">
+                </div>
+                <div class="col-12 py-1">
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Войти</button>
+                </div>
+                <div class="col-12 py-1 text-center">
+                    <span>Нет аккаунта? </span>
+                    <a th:href="@{/register}" class="fw-bold link-dark">Зарегистрируйся</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

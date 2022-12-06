@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+    <title>Products</title>
+</head>
+<body>
+  <h1 sec:authorize="hasRole('CUSTOMER')">Hello, customer</h1>
+  <h1 sec:authorize="hasRole('ADMIN')">Hello, admin</h1>
+</body>
+</html>

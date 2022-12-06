@@ -1,0 +1,28 @@
+:root {
+    --color1: #dedee2;
+    --bg-color1: #f4f5f7;
+}
+
+body {
+    font-size: 1.4rem;
+    font-family: Roboto,Helvetica,Arial,sans-serif;
+}
+
+header {
+    border-bottom: 2px solid var(--color1);
+}
+
+.nav-link,
+.nav-link:focus{
+    color: black;
+    border-radius: 3em;
+}
+
+.nav-link:hover {
+    color: black;
+    background-color: var(--color1);
+}
+
+.bg-color1 {
+    background-color: var(--bg-color1);
+}

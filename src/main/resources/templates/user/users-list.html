@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+    <title>Users</title>
+</head>
+<body>
+<div class="container text-center">
+    <h2>Users</h2>
+    <table class="table table-bordered bg-light">
+        <thead class="table-dark">
+        <tr>
+            <th>Username</th>
+            <th>Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="user: ${usersList}">
+            <tr>
+                <td>[[${user.username}]]</td>
+                <td>[[${user.role}]]</td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
