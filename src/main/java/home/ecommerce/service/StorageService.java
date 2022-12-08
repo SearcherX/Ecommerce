@@ -36,4 +36,10 @@ public class StorageService {
 
         throw new RuntimeException("Ошибка загрузки файла");
     }
+
+    public void deleteFile(String fileName) {
+        File file = new File(uploadPath + "/" + fileName);
+        if (file.exists())
+            file.delete();
+    }
 }

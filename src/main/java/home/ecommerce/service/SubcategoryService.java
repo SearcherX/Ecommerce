@@ -34,14 +34,12 @@ public class SubcategoryService {
     public Subcategory add(SubcategoryDTO subcategoryDTO) {
         Subcategory subcategory = new Subcategory();
         modelMapper.map(subcategoryDTO, subcategory);
-//        subcategory.setCategory(categoryService.findById(subcategoryDTO.getCategoryId()));
         return save(subcategory);
     }
 
     public SubcategoryDTO toDTO(Subcategory subcategory) {
         SubcategoryDTO subcategoryDTO = new SubcategoryDTO();
         modelMapper.map(subcategory, subcategoryDTO);
-//        subcategoryDTO.setCategoryId(subcategory.getCategory().getId());
         return subcategoryDTO;
     }
 

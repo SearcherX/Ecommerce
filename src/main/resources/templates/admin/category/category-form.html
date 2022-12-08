@@ -27,13 +27,13 @@
                 </div>
                 <div class="col-12 py-1">
                     <label for="inputFile" class="form-label">Изображение</label>
-                    <input type="file" name="file" class="form-control" id="inputFile" th:value="${file}">
+                    <input type="file" th:field="*{file}" class="form-control" id="inputFile" accept="image/*">
                 </div>
+                <input type="hidden" name="action" th:value="${action}">
                 <div class="col-12 py-1">
                     <button type="submit" class="btn btn-success fw-bold">Добавить</button>
                     <button type="submit" class="btn btn-danger fw-bold">Отмена</button>
                 </div>
-
             </form>
         </div>
     </div>

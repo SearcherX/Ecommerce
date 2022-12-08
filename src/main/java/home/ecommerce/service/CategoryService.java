@@ -1,21 +1,21 @@
 package home.ecommerce.service;
 
 import home.ecommerce.dto.CategoryDTO;
-import home.ecommerce.dto.UserDTO;
 import home.ecommerce.entity.Category;
-import home.ecommerce.entity.User;
 import home.ecommerce.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class CategoryService {
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final StorageService storageService;
     private final ModelMapper modelMapper;
 
     public List<Category> listAllCategories() {
@@ -31,8 +31,32 @@ public class CategoryService {
     }
 
     public Category add(CategoryDTO categoryDTO) {
+        String fileName = storageService.uploadFile(categoryDTO.getFile());
         Category category = new Category();
         modelMapper.map(categoryDTO, category);
+        category.setFileName(fileName);
+        return save(category);
+    }
+
+    public Category update(CategoryDTO categoryDTO) {
+        Category oldCategory = categoryRepository.findByCategoryName(categoryDTO.getCategoryName());
+        Category category = new Category();
+        String oldFileName = oldCategory.getFileName();
+
+        try {
+            String fileName = storageService.uploadFile(categoryDTO.getFile());
+
+            if (!Objects.equals(oldFileName, fileName))
+                storageService.deleteFile(oldFileName);
+
+            category.setFileName(fileName);
+        } catch (RuntimeException ignore) {
+            category.setFileName(oldFileName);
+        }
+
+        category.setId(oldCategory.getId());
+        category.setCategoryName(categoryDTO.getCategoryName());
+        category.setCipher(categoryDTO.getCipher());
         return save(category);
     }
 
@@ -44,6 +68,13 @@ public class CategoryService {
 
     public void deleteCategory(Long id) {
         Optional<Category> deleted = categoryRepository.findById(id);
-        deleted.ifPresent(categoryRepository::delete);
+        deleted.ifPresent(category -> {
+            categoryRepository.delete(category);
+            storageService.deleteFile(category.getFileName());
+        });
+    }
+
+    public long count() {
+        return categoryRepository.count();
     }
 }

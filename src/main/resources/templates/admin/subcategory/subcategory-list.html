@@ -10,7 +10,8 @@
     <div class="row mb-2">
       <!-- ссылка на добавление новой категории -->
       <div class="col-6 d-flex justify-content-start">
-        <a th:href="@{/admin/subcategories/new}" class="btn btn-success">
+        <span th:if="${categoriesCount == 0}" >Добавьте категории пержде чем добавить подкатегории</span>
+        <a th:if="${categoriesCount > 0}" th:href="@{/admin/subcategories/new}" class="btn btn-success">
           Добавить
         </a>
       </div>

@@ -25,6 +25,7 @@ public class SubcategoryController {
     @GetMapping("")
     public String showSubcategories(Model model) {
         model.addAttribute("subcategoryList", subcategoryService.listAllSubcategories());
+        model.addAttribute("categoriesCount", categoryService.count());
         return "admin/subcategory/subcategory-list";
     }
 
