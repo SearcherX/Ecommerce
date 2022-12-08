@@ -30,10 +30,6 @@ public class AccountController {
     private final UserService userService;
     private final VerificationTokenService verificationTokenService;
 
-//    public AccountController(UserService userService) {
-//        this.userService = userService;
-//    }
-
     @InitBinder
     public void initBInder(WebDataBinder dataBinder) {
         StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
@@ -43,7 +39,7 @@ public class AccountController {
     @GetMapping("/register")
     public String register(UserDTO userDTO, Model model) {
         model.addAttribute("userDTO", userDTO);
-        return "layout/register";
+        return "account/register";
     }
 
     @PostMapping("/register")
@@ -66,7 +62,7 @@ public class AccountController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "layout/register";
+            return "account/register";
         }
 
         ra.addFlashAttribute("message",
@@ -98,6 +94,6 @@ public class AccountController {
             }
         }
 
-        return "layout/activation";
+        return "account/activation";
     }
 }

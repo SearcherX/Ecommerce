@@ -21,11 +21,12 @@ CREATE TABLE verification_token_t
 
 CREATE TABLE category_t
 (
-    id     bigserial NOT NULL,
-    cipher varchar(255),
-    name   varchar(255),
+    id            bigserial NOT NULL,
+    cipher        varchar(255),
+    category_name varchar(255),
+    file_name     varchar(255),
     PRIMARY KEY (id)
 );
 
 ALTER TABLE IF EXISTS verification_token_t
-    ADD CONSTRAINT verification_token_fk_user FOREIGN KEY (user_id) REFERENCES user_t;
+    ADD CONSTRAINT verification_token_fk_user FOREIGN KEY (user_id) REFERENCES user_t ON DELETE CASCADE;

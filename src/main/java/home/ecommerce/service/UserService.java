@@ -78,4 +78,9 @@ public class UserService {
 
         return saved.get();
     }
+
+    public void deleteUser(Long id) {
+        Optional<User> deleted = userRepository.findById(id);
+        deleted.ifPresent(userRepository::delete);
+    }
 }

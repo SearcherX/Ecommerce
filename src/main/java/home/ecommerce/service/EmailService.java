@@ -33,7 +33,7 @@ public class EmailService {
             context.setVariable("title", "Verify your email address");
             context.setVariable("link", "http://localhost:8080/activation?token=" + token);
 
-            String body = templateEngine.process("layout/verification", context);
+            String body = templateEngine.process("account/verification", context);
 
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
