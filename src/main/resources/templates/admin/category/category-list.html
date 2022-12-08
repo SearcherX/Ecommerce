@@ -41,6 +41,11 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
+                                    <a th:href="@{|/admin/categories/update/${category.id}|}" class="dropdown-item">
+                                        Изменить
+                                    </a>
+                                </li>
+                                <li>
                                     <a th:href="@{|/admin/categories/delete/${category.id}|}" class="dropdown-item">
                                         Удалить
                                     </a>

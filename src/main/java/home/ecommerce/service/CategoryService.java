@@ -22,6 +22,10 @@ public class CategoryService {
         return (List<Category>) categoryRepository.findAll();
     }
 
+    public Category findById(Long id) {
+        return categoryRepository.findById(id).orElse(null);
+    }
+
     public Category save(Category category) {
         return categoryRepository.save(category);
     }
@@ -30,6 +34,12 @@ public class CategoryService {
         Category category = new Category();
         modelMapper.map(categoryDTO, category);
         return save(category);
+    }
+
+    public CategoryDTO toDTO(Category category) {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        modelMapper.map(category, categoryDTO);
+        return categoryDTO;
     }
 
     public void deleteCategory(Long id) {

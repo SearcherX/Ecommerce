@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
-  <title>Добавить категорию</title>
+    <title>Добавить категорию</title>
 </head>
 <body class="bg-color1">
 <header th:replace="~{layout/layouts.html :: menu}"></header>
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-4">
-      <form method="post" th:action="@{/admin/categories/save}" th:object="${categoryDTO}" enctype="multipart/form-data">
-        <h1 class="display-4 text-center">Категория</h1>
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <form method="post" th:action="@{/admin/categories/save}" th:object="${categoryDTO}"
+                  enctype="multipart/form-data">
+                <h3 class="display-4 text-center"
+                    th:text="${action == 'create' ? 'Добавить категорию' : 'Редактировать категорию'}"></h3>
 
-        <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
+                <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
 
-        <div class="col-12 py-1">
-          <label for="inputName" class="form-label">Название</label>
-          <input type="text" class="form-control" id="inputName"
-                 th:field="*{categoryName}">
-        </div>
-        <div class="col-12 py-1">
-          <label for="inputCipher" class="form-label">Шифр</label>
-          <input type="text" class="form-control" id="inputCipher"
-                 th:field="*{cipher}">
-        </div>
-        <div class="col-12 py-1">
-          <label for="inputFile" class="form-label">Шифр</label>
-          <input type="file" name="file" class="form-control" id="inputFile">
-        </div>
-        <div class="col-12 py-1">
-          <button type="submit" class="btn btn-success fw-bold">Добавить</button>
-          <button type="submit" class="btn btn-danger fw-bold">Отмена</button>
-        </div>
+                <div class="col-12 py-1">
+                    <label for="inputName" class="form-label">Название</label>
+                    <input type="text" class="form-control" id="inputName"
+                           th:field="*{categoryName}">
+                </div>
+                <div class="col-12 py-1">
+                    <label for="inputCipher" class="form-label">Шифр</label>
+                    <input type="text" class="form-control" id="inputCipher"
+                           th:field="*{cipher}">
+                </div>
+                <div class="col-12 py-1">
+                    <label for="inputFile" class="form-label">Изображение</label>
+                    <input type="file" name="file" class="form-control" id="inputFile" th:value="${file}">
+                </div>
+                <div class="col-12 py-1">
+                    <button type="submit" class="btn btn-success fw-bold">Добавить</button>
+                    <button type="submit" class="btn btn-danger fw-bold">Отмена</button>
+                </div>
 
-      </form>
+            </form>
+        </div>
     </div>
-  </div>
 </div>
 <script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
 </body>

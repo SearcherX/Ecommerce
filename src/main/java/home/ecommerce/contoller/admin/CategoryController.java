@@ -1,16 +1,16 @@
 package home.ecommerce.contoller.admin;
 
 import home.ecommerce.dto.CategoryDTO;
-import home.ecommerce.dto.UserDTO;
 import home.ecommerce.service.CategoryService;
 import home.ecommerce.service.StorageService;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
 
 @Controller
 @RequestMapping("/admin/categories")
@@ -28,7 +28,19 @@ public class CategoryController {
 
     @GetMapping("/new")
     public String showCategoryForm(CategoryDTO categoryDTO, Model model) {
+        model.addAttribute("action", "create");
         model.addAttribute("categoryDTO", categoryDTO);
+        model.addAttribute("file", null);
+        return "admin/category/category-form";
+    }
+
+    @GetMapping("/update/{id}")
+    public String showUpdateCategoryForm(@PathVariable("id") Long id, Model model) throws FileNotFoundException {
+        model.addAttribute("action", "update");
+        CategoryDTO categoryDTO =  categoryService.toDTO(categoryService.findById(id));
+        model.addAttribute("categoryDTO", categoryDTO);
+
+        model.addAttribute("file", categoryDTO.getFileName());
         return "admin/category/category-form";
     }
 

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Setter
 @Getter
 @Entity
@@ -15,4 +17,6 @@ public class Category {
     private String categoryName;
     private String cipher;
     private String fileName;
+    @OneToMany(mappedBy = "category")
+    private Set<Subcategory> subcategories;
 }

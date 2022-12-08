@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout/admin-layout}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+<div layout:fragment="content">
+  <div class="container text-center">
+    <h2 class="mt-2">Подкатегории</h2>
+
+    <div class="row mb-2">
+      <!-- ссылка на добавление новой категории -->
+      <div class="col-6 d-flex justify-content-start">
+        <a th:href="@{/admin/subcategories/new}" class="btn btn-success">
+          Добавить
+        </a>
+      </div>
+    </div>
+
+    <table class="table table-bordered bg-light">
+      <thead class="table-dark">
+      <tr>
+        <th>Id</th>
+        <th>Название</th>
+        <th>Шифр</th>
+        <th>Изображение</th>
+        <th>Категория</th>
+        <th>Действие</th>
+      </tr>
+      </thead>
+      <tbody>
+      <th:block th:each="subcategory: ${subcategoryList}">
+        <tr>
+          <td>[[${subcategory.id}]]</td>
+          <td>[[${subcategory.subcategoryName}]]</td>
+          <td>[[${subcategory.cipher}]]</td>
+          <td><a th:href="@{${'/img/' + subcategory.fileName}}" target="_blank">Ссылка</a></td>
+          <td>[[${subcategory.category.categoryName}]]</td>
+          <td>
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                Выбрать
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a th:href="@{|/admin/subcategories/update/${subcategory.id}|}" class="dropdown-item">
+                    Изменить
+                  </a>
+                </li>
+                <li>
+                  <a th:href="@{|/admin/subcategories/delete/${subcategory.id}|}" class="dropdown-item">
+                    Удалить
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </th:block>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

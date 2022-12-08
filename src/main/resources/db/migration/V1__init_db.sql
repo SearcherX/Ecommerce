@@ -28,5 +28,33 @@ CREATE TABLE category_t
     PRIMARY KEY (id)
 );
 
+CREATE TABLE subcategory_t
+(
+    id               bigserial NOT NULL,
+    cipher           varchar(255),
+    file_name        varchar(255),
+    subcategory_name varchar(255),
+    category_id      bigint,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE product_t
+(
+    id             bigserial NOT NULL,
+    cipher         varchar(255),
+    description    varchar(255),
+    present        boolean,
+    price          float(53),
+    product_name   varchar(255),
+    subcategory_id bigint,
+    PRIMARY KEY (id)
+);
+
 ALTER TABLE IF EXISTS verification_token_t
     ADD CONSTRAINT verification_token_fk_user FOREIGN KEY (user_id) REFERENCES user_t ON DELETE CASCADE;
+
+ALTER TABLE IF EXISTS subcategory_t
+    ADD CONSTRAINT subcategory_fk_category FOREIGN KEY (category_id) REFERENCES category_t ON DELETE CASCADE;
+
+ALTER TABLE IF EXISTS product_t
+    ADD CONSTRAINT product_fk_subcategory FOREIGN KEY (subcategory_id) REFERENCES subcategory_t ON DELETE CASCADE;
