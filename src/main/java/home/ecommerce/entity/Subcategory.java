@@ -1,5 +1,6 @@
 package home.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +23,9 @@ public class Subcategory {
     @ManyToOne
     @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Category category;
     @OneToMany(mappedBy = "subcategory")
+    @JsonIgnore
     private Set<Product> products;
 }

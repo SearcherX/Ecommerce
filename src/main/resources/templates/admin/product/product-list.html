@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout/admin-layout}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+<div layout:fragment="content">
+  <div class="container">
+    <h2 class="mt-2 text-center">Товары</h2>
+
+    <div class="row mb-2">
+      <!-- ссылка на добавление нового товара -->
+      <div class="col-6 d-flex justify-content-start">
+        <span th:if="${subcategoriesCount == 0}" >Добавьте категории пержде чем добавить подкатегории</span>
+        <a th:if="${subcategoriesCount > 0}" th:href="@{/admin/products/new}" class="btn btn-success">
+          Добавить
+        </a>
+      </div>
+    </div>
+
+    <table class="table table-bordered bg-light">
+      <thead class="table-dark text-center">
+      <tr>
+        <th>Id</th>
+        <th>Название</th>
+        <th>Шифр</th>
+        <th>Цена</th>
+        <th>В наличии</th>
+        <th>Подкатегория</th>
+        <th>Действие</th>
+      </tr>
+      </thead>
+      <tbody>
+      <th:block th:each="product: ${productList}">
+        <tr>
+          <td>[[${product.id}]]</td>
+          <td>[[${product.productName}]]</td>
+          <td>[[${product.cipher}]]</td>
+          <td>[[${product.price}]]</td>
+          <td th:text="${product.present ? 'Да' : 'Нет'}"></td>
+          <td>[[${product.subcategory.subcategoryName}]]</td>
+          <td class="text-center">
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                Выбрать
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a th:href="@{|/admin/products/update/${product.id}|}" class="dropdown-item">
+                    Изменить
+                  </a>
+                </li>
+                <li>
+                  <a th:href="@{|/admin/products/delete/${product.id}|}" class="dropdown-item">
+                    Удалить
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </th:block>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

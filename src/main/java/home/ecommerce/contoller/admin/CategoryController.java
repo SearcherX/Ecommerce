@@ -9,10 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/admin/categories")
@@ -20,7 +18,6 @@ import java.util.Objects;
 @AllArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
-    private final StorageService storageService;
 
     @GetMapping("")
     public String showCategories(Model model) {
@@ -44,11 +41,11 @@ public class CategoryController {
     }
 
     @PostMapping("/save")
-    public String save(CategoryDTO categoryDTO, @RequestParam String action) {
+    public String save(CategoryDTO categoryDTO, @RequestParam String action, @RequestParam @Nullable Long id) {
         if (action.equals("create"))
             categoryService.add(categoryDTO);
         else
-            categoryService.update(categoryDTO);
+            categoryService.update(categoryDTO, id);
 
         return "redirect:/admin/categories";
     }

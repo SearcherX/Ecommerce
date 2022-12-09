@@ -38,25 +38,25 @@ public class CategoryService {
         return save(category);
     }
 
-    public Category update(CategoryDTO categoryDTO) {
-        Category oldCategory = categoryRepository.findByCategoryName(categoryDTO.getCategoryName());
-        Category category = new Category();
+    public Category update(CategoryDTO categoryDTO, Long id) {
+        Category oldCategory = findById(id);
         String oldFileName = oldCategory.getFileName();
+        String newFileName;
 
         try {
-            String fileName = storageService.uploadFile(categoryDTO.getFile());
+            newFileName = storageService.uploadFile(categoryDTO.getFile());
 
-            if (!Objects.equals(oldFileName, fileName))
+            if (!Objects.equals(oldFileName, newFileName))
                 storageService.deleteFile(oldFileName);
-
-            category.setFileName(fileName);
         } catch (RuntimeException ignore) {
-            category.setFileName(oldFileName);
+            newFileName = oldFileName;
         }
 
-        category.setId(oldCategory.getId());
-        category.setCategoryName(categoryDTO.getCategoryName());
-        category.setCipher(categoryDTO.getCipher());
+        Category category = new Category();
+        modelMapper.map(categoryDTO, category);
+        category.setId(id);
+        category.setFileName(newFileName);
+
         return save(category);
     }
 

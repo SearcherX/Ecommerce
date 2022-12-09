@@ -2,14 +2,13 @@ package home.ecommerce.contoller.admin;
 
 import home.ecommerce.dto.SubcategoryDTO;
 import home.ecommerce.service.CategoryService;
-import home.ecommerce.service.StorageService;
 import home.ecommerce.service.SubcategoryService;
+import jakarta.annotation.Nullable;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 
@@ -19,7 +18,6 @@ import java.io.FileNotFoundException;
 @AllArgsConstructor
 public class SubcategoryController {
     private final SubcategoryService subcategoryService;
-    private final StorageService storageService;
     private final CategoryService categoryService;
 
     @GetMapping("")
@@ -34,7 +32,6 @@ public class SubcategoryController {
         model.addAttribute("action", "create");
         model.addAttribute("subcategoryDTO", subcategoryDTO);
         model.addAttribute("categoriesList", categoryService.listAllCategories());
-        model.addAttribute("file", null);
         return "admin/subcategory/subcategory-form";
     }
 
@@ -43,16 +40,16 @@ public class SubcategoryController {
         model.addAttribute("action", "update");
         SubcategoryDTO subcategoryDTO =  subcategoryService.toDTO(subcategoryService.findById(id));
         model.addAttribute("subcategoryDTO", subcategoryDTO);
-
-        model.addAttribute("file", subcategoryDTO.getFileName());
+        model.addAttribute("categoriesList", categoryService.listAllCategories());
         return "admin/subcategory/subcategory-form";
     }
 
     @PostMapping("/save")
-    public String save(SubcategoryDTO subcategoryDTO, @RequestParam("file") MultipartFile file) {
-        String fileName = storageService.uploadFile(file);
-        subcategoryDTO.setFileName(fileName);
-        subcategoryService.add(subcategoryDTO);
+    public String save(SubcategoryDTO subcategoryDTO, @RequestParam String action, @RequestParam @Nullable Long id) {
+        if (action.equals("create"))
+            subcategoryService.add(subcategoryDTO);
+        else
+            subcategoryService.update(subcategoryDTO, id);
         return "redirect:/admin/subcategories";
     }
 

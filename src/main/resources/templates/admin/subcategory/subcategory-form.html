@@ -39,6 +39,8 @@
             </th:block>
           </select>
         </div>
+        <input type="hidden" name="action" th:value="${action}">
+        <input type="hidden" name="id" th:value="${id}">
         <div class="col-12 py-1">
           <button type="submit" class="btn btn-success fw-bold">Добавить</button>
           <button type="submit" class="btn btn-danger fw-bold">Отмена</button>
