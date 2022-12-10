@@ -1,6 +1,10 @@
 package home.ecommerce.service;
 
+import home.ecommerce.dto.CategoryDTO;
+import home.ecommerce.dto.ProductDTO;
 import home.ecommerce.dto.UserDTO;
+import home.ecommerce.entity.Category;
+import home.ecommerce.entity.Product;
 import home.ecommerce.entity.Role;
 import home.ecommerce.entity.User;
 import home.ecommerce.repository.UserRepository;
@@ -40,6 +44,9 @@ public class UserService {
         return true;
     }
 
+    public User findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
     @Transactional
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -53,6 +60,12 @@ public class UserService {
     @Transactional
     public User save(User user) {
         return userRepository.save(user);
+    }
+
+    public UserDTO toDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        modelMapper.map(user, userDTO);
+        return userDTO;
     }
 
     @Transactional
@@ -77,6 +90,21 @@ public class UserService {
         });
 
         return saved.get();
+    }
+
+    public User add(UserDTO userDTO, Role role) {
+        User user = new User();
+        modelMapper.map(userDTO, user);
+        user.setRole(role);
+        return save(user);
+    }
+
+    public User update(UserDTO userDTO, Role role, Long id) {
+        User user = new User();
+        modelMapper.map(userDTO, user);
+        user.setId(id);
+        user.setRole(role);
+        return save(user);
     }
 
     public void deleteUser(Long id) {

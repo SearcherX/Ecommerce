@@ -6,6 +6,16 @@
 <div layout:fragment="content">
     <div class="container text-center">
         <h2>Пользователи</h2>
+
+        <div class="row mb-2">
+            <!-- ссылка на добавление нового пользователя -->
+            <div class="col-6 d-flex justify-content-start">
+                <a th:href="@{/admin/users/new}" class="btn btn-success">
+                    Добавить
+                </a>
+            </div>
+        </div>
+
         <table class="table table-bordered bg-light">
             <thead class="table-dark">
             <tr>
@@ -25,12 +35,17 @@
                         <div class="dropdown">
                             <button class="btn btn-primary dropdown-toggle" type="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                Select
+                                Выбрать
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
+                                    <a th:href="@{|/admin/users/update/${user.id}|}" class="dropdown-item">
+                                        Изменить
+                                    </a>
+                                </li>
+                                <li>
                                     <a th:href="@{|/admin/users/delete/${user.id}|}" class="dropdown-item">
-                                        Delete
+                                        Удалить
                                     </a>
                                 </li>
                             </ul>

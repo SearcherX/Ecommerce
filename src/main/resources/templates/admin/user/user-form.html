@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+  <title th:text="${action == 'create' ? 'Добавить пользователя' : 'Редактировать пользователя'}"></title>
+</head>
+<body class="bg-color1">
+<header th:replace="~{layout/layouts.html :: menu}"></header>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-4">
+      <form method="post" th:action="@{/admin/users/save}" th:object="${userDTO}"
+            enctype="multipart/form-data">
+        <h3 class="display-4 text-center"
+            th:text="${action == 'create' ? 'Добавить пользователя' : 'Редактировать пользователя'}"></h3>
+
+        <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
+
+        <div class="col-12 py-1">
+          <label for="inputUsername" class="form-label">Логин</label>
+          <input type="text" class="form-control" id="inputUsername"
+                 th:field="*{username}">
+        </div>
+        <div class="col-12 py-1">
+          <label for="inputPassword" class="form-label">Пароль</label>
+          <input type="text" class="form-control" id="inputPassword"
+                 th:field="*{password}">
+        </div>
+        <div class="col-12 py-1">
+          <label for="inputEmail" class="form-label">Емейл</label>
+          <input type="text" class="form-control" id="inputEmail"
+                 th:field="*{email}">
+        </div>
+        <div class="col-12">
+          <label for="inputRole" class="form-label">Роль</label>
+          <select id="inputRole" class="form-select" name="role" th:value="${role}">
+            <th:block th:each="choseRole: ${rolesList}">
+              <option th:value="${choseRole}">
+                [[${choseRole}]]
+              </option>
+            </th:block>
+          </select>
+        </div>
+        <input type="hidden" name="action" th:value="${action}">
+        <input type="hidden" name="id" th:value="${id}">
+        <div class="col-12 py-1">
+          <button type="submit" class="btn btn-success fw-bold">Добавить</button>
+          <button type="submit" class="btn btn-danger fw-bold">Отмена</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+<script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+</body>
+</html>
