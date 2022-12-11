@@ -50,6 +50,14 @@ CREATE TABLE product_t
     PRIMARY KEY (id)
 );
 
+CREATE TABLE image_t
+(
+    id         bigserial NOT NULL,
+    file_name  varchar(255),
+    product_id bigint,
+    PRIMARY KEY (id)
+);
+
 ALTER TABLE IF EXISTS verification_token_t
     ADD CONSTRAINT verification_token_fk_user FOREIGN KEY (user_id) REFERENCES user_t ON DELETE CASCADE;
 
@@ -58,3 +66,6 @@ ALTER TABLE IF EXISTS subcategory_t
 
 ALTER TABLE IF EXISTS product_t
     ADD CONSTRAINT product_fk_subcategory FOREIGN KEY (subcategory_id) REFERENCES subcategory_t ON DELETE CASCADE;
+
+ALTER TABLE IF EXISTS image_t
+    ADD CONSTRAINT image_product FOREIGN KEY (product_id) REFERENCES product_t ON DELETE CASCADE;

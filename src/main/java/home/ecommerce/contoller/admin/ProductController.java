@@ -1,7 +1,6 @@
 package home.ecommerce.contoller.admin;
 
 import home.ecommerce.dto.ProductDTO;
-import home.ecommerce.dto.SubcategoryDTO;
 import home.ecommerce.entity.Category;
 import home.ecommerce.entity.Subcategory;
 import home.ecommerce.service.CategoryService;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 @Controller
@@ -56,6 +54,12 @@ public class ProductController {
             productService.add(productDTO);
         else
             productService.update(productDTO, id);
+        return "redirect:/admin/products";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
         return "redirect:/admin/products";
     }
 

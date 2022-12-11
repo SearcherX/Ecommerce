@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout/admin-layout}"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <h2 class="mt-2 text-center" th:text="${'Изображения товара ' + product.productName}"></h2>
+
+        <div class="row justify-content-center">
+            <div class="col-5">
+                <div class="container text-center">
+                    <div class="row mb-2">
+                        <!-- ссылка на добавление нового товара -->
+                        <div class="col-6 d-flex justify-content-start">
+                            <a th:href="@{|/admin/products/${product.id}/images/new|}" class="btn btn-success">
+                                Добавить
+                            </a>
+                        </div>
+                    </div>
+
+                    <table class="table table-bordered bg-light">
+                        <thead class="table-dark text-center">
+                        <tr>
+                            <th>Id</th>
+                            <th>Изображение</th>
+                            <th>Действие</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="image: ${imagesList}">
+                            <tr>
+                                <td>[[${image.id}]]</td>
+                                <td><a th:href="@{${'/img/' + image.fileName}}" target="_blank">Ссылка</a></td>
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            Выбрать
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a th:href="@{|/admin/products/${id}/images/update/${image.id}|}"
+                                                   class="dropdown-item">
+                                                    Изменить
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a th:href="@{|/admin/products/${id}/images/delete/${image.id}|}"
+                                                   class="dropdown-item">
+                                                    Удалить
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

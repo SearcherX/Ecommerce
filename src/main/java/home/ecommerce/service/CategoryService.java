@@ -26,6 +26,10 @@ public class CategoryService {
         return categoryRepository.findById(id).orElse(null);
     }
 
+    public Category findByCipher(String cipher) {
+        return categoryRepository.findByCipher(cipher);
+    }
+
     public Category save(Category category) {
         return categoryRepository.save(category);
     }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout/product-layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Каталог товаров</li>
+            </ol>
+        </nav>
+        <h1>Каталог товаров</h1>
+        <div class="category-container">
+            <div th:each="category: ${categoriesList}" class="category-item position-relative">
+                <div>
+                    <img th:src="@{|/img/${category.fileName}|}" th:alt="${category.categoryName}">
+                </div>
+                <a th:href="@{|/catalog/${category.cipher}|}" class="stretched-link">[[${category.categoryName}]]</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
