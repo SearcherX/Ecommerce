@@ -58,6 +58,25 @@ CREATE TABLE image_t
     PRIMARY KEY (id)
 );
 
+CREATE TABLE bucket_item_t
+(
+    id          bigserial NOT NULL,
+    quantity    integer   NOT NULL,
+    total_price float(53) NOT NULL,
+    bucket_id   bigint,
+    product_id  bigint,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE bucket_t
+(
+    id           bigserial NOT NULL,
+    total_items  integer   NOT NULL,
+    total_prices float(53) NOT NULL,
+    user_id      bigint,
+    PRIMARY KEY (id)
+);
+
 ALTER TABLE IF EXISTS verification_token_t
     ADD CONSTRAINT verification_token_fk_user FOREIGN KEY (user_id) REFERENCES user_t ON DELETE CASCADE;
 
@@ -69,3 +88,12 @@ ALTER TABLE IF EXISTS product_t
 
 ALTER TABLE IF EXISTS image_t
     ADD CONSTRAINT image_product FOREIGN KEY (product_id) REFERENCES product_t ON DELETE CASCADE;
+
+ALTER TABLE IF EXISTS bucket_item_t
+    ADD CONSTRAINT bucket_item_bucket FOREIGN KEY (bucket_id) REFERENCES bucket_t;
+
+ALTER TABLE IF EXISTS bucket_item_t
+    ADD CONSTRAINT bucket_item_product FOREIGN KEY (product_id) REFERENCES product_t;
+
+ALTER TABLE IF EXISTS bucket_t
+    ADD CONSTRAINT bucket_user FOREIGN KEY (user_id) REFERENCES user_t;

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+    <title>Корзина</title>
+</head>
+<body>
+<header th:replace="~{layout/layouts.html :: menu}"></header>
+<div class="container text-center">
+    <h2>Корзина</h2>
+
+    <table class="table table-bordered bg-light">
+        <thead class="table-dark">
+        <tr>
+            <th>Номер</th>
+            <th>Название</th>
+            <th>Цена</th>
+            <th>Колиечество</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="bucketItem, stat: ${bucket.getBucketItem()}">
+            <tr>
+                <td>[[${stat.index + 1}]]</td>
+                <td>[[${bucketItem.product.productName}]]</td>
+                <td>[[${bucketItem.totalPrice}]]</td>
+                <td>[[${bucketItem.quantity}]]</td>
+
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+<script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+</body>
+</html>

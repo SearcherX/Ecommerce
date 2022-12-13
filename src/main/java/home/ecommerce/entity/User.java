@@ -20,6 +20,8 @@ public class User {
     private String password;
     private String email;
     private boolean enabled;
+    @OneToOne(mappedBy = "user")
+    private Bucket bucket;
     @Enumerated(EnumType.STRING)
     private Role role;
 }

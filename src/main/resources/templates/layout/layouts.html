@@ -38,7 +38,7 @@
                             <li sec:authorize="isAnonymous()"><a th:href="@{/register}" class="dropdown-item">Регистрация</a>
                             </li>
 
-                            <li sec:authorize="isAuthenticated()"><a href="#" class="dropdown-item">Корзина</a></li>
+                            <li sec:authorize="isAuthenticated()"><a th:href="@{/bucket}" class="dropdown-item">Корзина</a></li>
                             <li sec:authorize="isAuthenticated()"><a href="#" class="dropdown-item">Настройки</a></li>
                             <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin}" class="dropdown-item">Админка</a></li>
                             <li sec:authorize="isAuthenticated()">

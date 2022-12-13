@@ -19,15 +19,25 @@
         </nav>
         <h1>[[${subcategory.subcategoryName}]]</h1>
         <div class="subcategory-products-container position-relative">
-            <div th:each="product: ${productList}" class="subcategory-product">
+            <div th:each="product, varStat: ${productList}" class="subcategory-product">
                 <div class="img-container">
-                    <img th:if="${product.getFiles().size() > 0}" th:src="@{|/img/${product.getFiles().get(0).fileName}|}" th:alt="${product.productName}">
+                    <img th:if="${product.getFiles().size() > 0}"
+                         th:src="@{|/img/${product.getFiles().get(0).fileName}|}" th:alt="${product.productName}">
                 </div>
                 <a th:href="@{|/catalog/${subcategory.category.cipher}/${subcategory.cipher}/${product.cipher}/details|}">
                     [[${product.productName}]]</a>
                 <div class="product-buy">
                     <span>[[${#numbers.formatDecimal(product.price, 3, 'POINT', 2, 'COMMA')}]] ₽</span>
-                    <button class="stat-link">В корзину</button>
+
+                    <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucket?.getBucketItem(), product)}"
+                         th:remove="tag">
+                        <button th:if="${condition}" class="btn-buy stat-link btn-cart">
+                            В корзине
+                        </button>
+                        <button th:unless="${condition}" class="btn-buy stat-link" th:data-index="${varStat.index}">
+                            Купить
+                        </button>
+                    </div>
                 </div>
                 <div class="product-stat">
                     <a th:href="@{#}" class="stat-link">Звезды</a>
@@ -39,3 +49,26 @@
 </div>
 </body>
 </html>
+
+<script th:inline="javascript">
+    document.querySelector(".btn-buy").addEventListener("click", async (e) => {
+        if (e.target.className.includes("btn-cart")) {
+            location.replace("/bucket")
+        } else {
+            const productList = [[${productList}]];
+            const index = +e.target.dataset.index;
+            const url = "/bucket/add?productId=" + productList[index].id;
+
+            const response = await fetch(url, {
+                method: "POST",
+            });
+
+            if (response.url.includes("/login")) {
+                location.replace(response.url);
+            } else {
+                e.target.textContent = "В корзине";
+                e.target.classList.add("btn-cart");
+            }
+        }
+    });
+</script>
