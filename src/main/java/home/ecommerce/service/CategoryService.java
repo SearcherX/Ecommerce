@@ -73,8 +73,8 @@ public class CategoryService {
     public void deleteCategory(Long id) {
         Optional<Category> deleted = categoryRepository.findById(id);
         deleted.ifPresent(category -> {
+            categoryRepository.deleteImages(category);
             categoryRepository.delete(category);
-            storageService.deleteFile(category.getFileName());
         });
     }
 

@@ -12,8 +12,8 @@
             </ol>
         </nav>
         <h1>Каталог товаров</h1>
-        <div class="category-container">
-            <div th:each="category: ${categoriesList}" class="category-item position-relative">
+        <div class="item-container">
+            <div th:each="category: ${categoriesList}" class="item position-relative">
                 <div>
                     <img th:src="@{|/img/${category.fileName}|}" th:alt="${category.categoryName}">
                 </div>

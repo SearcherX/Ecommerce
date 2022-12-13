@@ -30,6 +30,10 @@ public class SubcategoryService {
         return subcategoryRepository.findById(id).orElse(null);
     }
 
+    public Subcategory findByCipher(String cipher) {
+        return subcategoryRepository.findByCipher(cipher);
+    }
+
     public Subcategory save(Subcategory subcategory) {
         return subcategoryRepository.save(subcategory);
     }

@@ -27,6 +27,10 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
+    public List<Product> findBySubcategory(Subcategory subcategory) {
+        return productRepository.findBySubcategory(subcategory);
+    }
+
     public Product save(Product product) {
         return productRepository.save(product);
     }

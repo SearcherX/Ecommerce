@@ -1,13 +1,12 @@
 package home.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Set;
+import java.util.List;
 
 @Setter
 @Getter
@@ -27,5 +26,5 @@ public class Product {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Subcategory subcategory;
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private Set<Image> files;
+    private List<Image> files;
 }

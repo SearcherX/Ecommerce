@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout/product-layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/catalog}">Каталог товаров</a></li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{'/catalog/' + ${subcategory.category.cipher}}">
+                        [[${subcategory.category.categoryName}]]
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">[[${subcategory.subcategoryName}]]</li>
+            </ol>
+        </nav>
+        <h1>[[${subcategory.subcategoryName}]]</h1>
+        <div class="subcategory-products-container position-relative">
+            <div th:each="product: ${productList}" class="subcategory-product">
+                <div class="img-container">
+                    <img th:if="${product.getFiles().size() > 0}" th:src="@{|/img/${product.getFiles().get(0).fileName}|}" th:alt="${product.productName}">
+                </div>
+                <a th:href="@{|/catalog/${subcategory.category.cipher}/${subcategory.cipher}/${product.cipher}/details|}">
+                    [[${product.productName}]]</a>
+                <div class="product-buy">
+                    <span>[[${#numbers.formatDecimal(product.price, 3, 'POINT', 2, 'COMMA')}]] ₽</span>
+                    <button class="stat-link">В корзину</button>
+                </div>
+                <div class="product-stat">
+                    <a th:href="@{#}" class="stat-link">Звезды</a>
+                    <a th:href="@{#}" class="stat-link">Отзывы</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
