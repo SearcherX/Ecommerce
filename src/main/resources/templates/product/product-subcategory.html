@@ -90,7 +90,7 @@
         } else {
             const imageProductList = [[${imageProductList}]];
             const index = +e.target.dataset.index;
-            const url = "/bucket/add?productId=" + imageProductList[index].product.id;
+            const url = "/bucket/add?productId=" + imageProductList[index]["product"]["id"];
 
             const response = await fetch(url, {
                 method: "POST",
