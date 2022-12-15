@@ -70,7 +70,6 @@ public class ProductService {
         if (pageCount > endPage)
             pageNumbers.add(pageCount);
 
-        System.out.println(pageNumbers);
         return pageNumbers;
     }
 
