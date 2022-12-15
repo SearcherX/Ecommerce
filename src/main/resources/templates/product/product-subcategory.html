@@ -29,7 +29,7 @@
                 <div class="product-buy">
                     <span>[[${#numbers.formatDecimal(product.price, 3, 'COMMA', 2, 'POINT')}]] ₽</span>
 
-                    <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucket?.getBucketItem(), product)}"
+                    <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucketItems, product)}"
                          th:remove="tag">
                         <button th:if="${condition}" class="btn-buy stat-link btn-cart">
                             В корзине
@@ -45,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <div class="mt-4">
+        <div class="mt-4" th:if="${#lists.size(pageNumbers) > 1}">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                     <li th:class="|page-item ${offset <= pageNumbers[0] ? 'disabled': ''}|">

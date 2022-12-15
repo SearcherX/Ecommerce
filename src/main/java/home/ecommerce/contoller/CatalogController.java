@@ -51,7 +51,7 @@ public class CatalogController {
         model.addAttribute("pageNumbers", productService.getPageNumbers(subcategory, offset));
         if (principal != null) {
             User user = userService.findByUsername(principal.getName());
-            model.addAttribute("bucket", bucketService.findByUser(user));
+            model.addAttribute("bucketItems", bucketService.findByUser(user).getBucketItems());
         }
         return "product/product-subcategory";
     }

@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -40,15 +37,15 @@ public class ProductService {
 
     // метод формирования списка страниц для пагинации
     // пример [x-2, x-1, x, x+1, last], где x - текущая страница, last - последняя
-    public List<Long> getPageNumbers(Subcategory subcategory, long currentPage) {
-        long productCount = productRepository.countBySubcategory(subcategory);
-        long pageCount = productCount / pageSize + (productCount % pageSize == 0 ? 0 : 1);
+    public List<Integer> getPageNumbers(Subcategory subcategory, int currentPage) {
+        int productCount = (int) productRepository.countBySubcategory(subcategory);
+        int pageCount = productCount / pageSize + (productCount % pageSize == 0 ? 0 : 1);
 
         if (currentPage <= 0 || currentPage > pageCount)
             throw new RuntimeException("Нет такой страницы");
 
-        long startPage;
-        long endPage = currentPage + 1;
+        int startPage;
+        int endPage = currentPage + 1;
 
         // добавить страницы слева
         // если слева нельзя добавить страницы, то добавить справа
@@ -75,8 +72,8 @@ public class ProductService {
         if (endPage > pageCount)
             endPage = pageCount;
 
-        List<Long> pageNumbers = new ArrayList<>();
-        for (long i = startPage; i <= endPage; i++) {
+        List<Integer> pageNumbers = new ArrayList<>();
+        for (int i = startPage; i <= endPage; i++) {
             pageNumbers.add(i);
         }
 
