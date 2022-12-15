@@ -10,14 +10,14 @@
                 <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
                 <li class="breadcrumb-item"><a th:href="@{/catalog}">Каталог товаров</a></li>
                 <li class="breadcrumb-item">
-                    <a th:href="@{'/catalog/' + ${imageProductList[0].product.subcategory.category.cipher}}">
-                        [[${imageProductList[0].product.subcategory.category.categoryName}]]
+                    <a th:href="@{'/catalog/' + ${category.cipher}}">
+                        [[${category.categoryName}]]
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">[[${imageProductList[0].product.subcategory.subcategoryName}]]</li>
+                <li class="breadcrumb-item active" aria-current="page">[[${subcategory.subcategoryName}]]</li>
             </ol>
         </nav>
-        <h1>[[${imageProductList[0].product.subcategory.subcategoryName}]]</h1>
+        <h1>[[${subcategory.subcategoryName}]]</h1>
         <div class="subcategory-products-container position-relative">
             <div th:each="image, varStat: ${imageProductList}" class="subcategory-product">
                 <div class="img-container">
@@ -62,7 +62,7 @@
                         <li th:class="|page-item ${page == offset ? 'pagination-widget__page_active' : ''}|"
                             th:aria-current="${page == offset ? 'page' : ''}">
                             <a class="page-link"
-                               th:href="@{|/catalog/${imageProductList[0].product.subcategory.category.cipher}/${imageProductList[0].product.subcategory.cipher}/${page}|}">[[${page}]]</a>
+                               th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/${page}|}">[[${page}]]</a>
                         </li>
 <!--                        добавить ... после первой страницы-->
                         <li class="page-item disabled"

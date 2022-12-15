@@ -50,6 +50,8 @@ public class CatalogController {
         Category category = categoryService.findByCipher(categories, cipher);
         Subcategory subcategory = subcategoryService.findByCipher(category.getSubcategories(), cipher2);
 
+        model.addAttribute("category", category);
+        model.addAttribute("subcategory", subcategory);
         model.addAttribute("imageProductList", imageService.findBySubcategory(subcategory, offset));
         model.addAttribute("pageNumbers", productService.getPageNumbers(subcategory, offset));
 

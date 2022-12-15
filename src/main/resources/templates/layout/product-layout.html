@@ -26,7 +26,7 @@
                         <div class="accordion-body">
                             <ul class="nav flex-column">
                                 <li class="nav-item" th:each="subcategory : ${category.subcategories}">
-                                    <a class="nav-link" th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}|}">
+                                    <a class="nav-link" th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/1|}">
                                         [[${subcategory.subcategoryName}]]
                                     </a>
                                 </li>
