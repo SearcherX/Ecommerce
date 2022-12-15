@@ -10,26 +10,26 @@
                 <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
                 <li class="breadcrumb-item"><a th:href="@{/catalog}">Каталог товаров</a></li>
                 <li class="breadcrumb-item">
-                    <a th:href="@{'/catalog/' + ${subcategory.category.cipher}}">
-                        [[${subcategory.category.categoryName}]]
+                    <a th:href="@{'/catalog/' + ${imageProductList[0].product.subcategory.category.cipher}}">
+                        [[${imageProductList[0].product.subcategory.category.categoryName}]]
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">[[${subcategory.subcategoryName}]]</li>
+                <li class="breadcrumb-item active" aria-current="page">[[${imageProductList[0].product.subcategory.subcategoryName}]]</li>
             </ol>
         </nav>
-        <h1>[[${subcategory.subcategoryName}]]</h1>
+        <h1>[[${imageProductList[0].product.subcategory.subcategoryName}]]</h1>
         <div class="subcategory-products-container position-relative">
-            <div th:each="product, varStat: ${productList}" class="subcategory-product">
+            <div th:each="image, varStat: ${imageProductList}" class="subcategory-product">
                 <div class="img-container">
-                    <img th:if="${product.getFiles().size() > 0}"
-                         th:src="@{|/img/${product.getFiles().get(0).fileName}|}" th:alt="${product.productName}">
+                    <img
+                         th:src="@{|/img/${image.fileName}|}" th:alt="${image.product.productName}">
                 </div>
-                <a th:href="@{|/catalog/${subcategory.category.cipher}/${subcategory.cipher}/${product.cipher}/details|}">
-                    [[${product.productName}]]</a>
+                <a th:href="@{|/catalog/${image.product.subcategory.category.cipher}/${image.product.subcategory.cipher}/${image.product.cipher}/details|}">
+                    [[${image.product.productName}]]</a>
                 <div class="product-buy">
-                    <span>[[${#numbers.formatDecimal(product.price, 3, 'COMMA', 2, 'POINT')}]] ₽</span>
+                    <span>[[${#numbers.formatDecimal(image.product.price, 3, 'COMMA', 2, 'POINT')}]] ₽</span>
 
-                    <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucketItems, product)}"
+                    <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucketItems, image.product)}"
                          th:remove="tag">
                         <button th:if="${condition}" class="btn-buy stat-link btn-cart">
                             В корзине
@@ -61,7 +61,7 @@
                         </li>
                         <li th:class="|page-item ${page == offset ? 'pagination-widget__page_active' : ''}|" th:aria-current="${page == offset ? 'page' : ''}">
                             <a class="page-link"
-                               th:href="@{|/catalog/${subcategory.category.cipher}/${subcategory.cipher}/${page}|}">[[${page}]]</a>
+                               th:href="@{|/catalog/${imageProductList[0].product.subcategory.category.cipher}/${imageProductList[0].product.subcategory.cipher}/${page}|}">[[${page}]]</a>
                         </li>
 <!--                        добавить ... после первой страницы-->
                         <li class="page-item disabled"
@@ -87,9 +87,9 @@
         if (e.target.className.includes("btn-cart")) {
             location.replace("/bucket")
         } else {
-            const productList = [[${productList}]];
+            const imageProductList = [[${imageProductList}]];
             const index = +e.target.dataset.index;
-            const url = "/bucket/add?productId=" + productList[index].id;
+            const url = "/bucket/add?productId=" + imageProductList[index].product.id;
 
             const response = await fetch(url, {
                 method: "POST",

@@ -21,6 +21,7 @@ public class CatalogController {
     private final ProductService productService;
     private final BucketService bucketService;
     private final UserService userService;
+    private final ImageService imageService;
 
     @GetMapping("/catalog")
     public String showCategories(Model model) {
@@ -47,9 +48,10 @@ public class CatalogController {
 
         Category category = categoryService.findByCipher(categories, cipher);
         Subcategory subcategory = subcategoryService.findByCipher(category.getSubcategories(), cipher2);
-        model.addAttribute("subcategory", subcategory);
-        model.addAttribute("productList", productService.findBySubcategory(subcategory, offset));
+        //model.addAttribute("subcategory", subcategory);
+        //model.addAttribute("productList", productService.findBySubcategory(subcategory, offset));
 
+        model.addAttribute("imageProductList", imageService.findBySubcategory(subcategory, offset));
         model.addAttribute("pageNumbers", productService.getPageNumbers(subcategory, offset));
 
         if (principal != null) {

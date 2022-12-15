@@ -20,7 +20,7 @@ public class Subcategory {
     private String subcategoryName;
     private String cipher;
     private String fileName;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore

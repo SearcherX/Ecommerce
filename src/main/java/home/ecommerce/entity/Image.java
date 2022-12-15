@@ -19,6 +19,5 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "product_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
     private Product product;
 }

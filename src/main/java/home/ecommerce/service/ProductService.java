@@ -4,6 +4,7 @@ import home.ecommerce.dto.ProductDTO;
 import home.ecommerce.dto.SubcategoryDTO;
 import home.ecommerce.entity.Product;
 import home.ecommerce.entity.Subcategory;
+import home.ecommerce.repository.ImageRepository;
 import home.ecommerce.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,15 +32,19 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
-    public List<Product> findBySubcategory(Subcategory subcategory, Integer offset) {
-        return productRepository.findAllBySubcategoryOrderByPrice(subcategory, PageRequest.of(offset - 1, pageSize));
-    }
+//    public List<Product> findBySubcategory(Subcategory subcategory, Integer offset) {
+//        return productRepository.findAllBySubcategoryOrderByPrice(subcategory, PageRequest.of(offset - 1, pageSize));
+//    }
+
 
     // метод формирования списка страниц для пагинации
     // пример [1,..., x-2, x-1, x, x+1, x+2, ...,last], где x - текущая страница, last - последняя
     public List<Integer> getPageNumbers(Subcategory subcategory, int currentPage) {
         int productCount = (int) productRepository.countBySubcategory(subcategory);
         int pageCount = productCount / pageSize + (productCount % pageSize == 0 ? 0 : 1);
+
+        if (pageCount <= 1)
+            return new ArrayList<>(List.of(1));
 
         if (currentPage <= 0 || currentPage > pageCount)
             throw new RuntimeException("Нет такой страницы");
@@ -52,15 +57,8 @@ public class ProductService {
 
         // добавить страницы справа
         if (currentPage + 2 > pageCount - 1) {
-            endPage = currentPage;
-        } else {
-            if (currentPage >= endPage)
-                endPage = currentPage + 2;
+            endPage = Math.min(currentPage + 2, pageCount - 1);
         }
-
-        // проверить, чтобы страницы не вылезли за диапазон
-        if (endPage > pageCount)
-            endPage = pageCount;
 
         List<Integer> pageNumbers = new ArrayList<>();
         pageNumbers.add(1);
@@ -72,6 +70,7 @@ public class ProductService {
         if (pageCount > endPage)
             pageNumbers.add(pageCount);
 
+        System.out.println(pageNumbers);
         return pageNumbers;
     }
 
