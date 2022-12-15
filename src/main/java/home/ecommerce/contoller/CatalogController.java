@@ -1,6 +1,7 @@
 package home.ecommerce.contoller;
 
 import home.ecommerce.entity.Category;
+import home.ecommerce.entity.Image;
 import home.ecommerce.entity.Subcategory;
 import home.ecommerce.entity.User;
 import home.ecommerce.service.*;
@@ -48,8 +49,6 @@ public class CatalogController {
 
         Category category = categoryService.findByCipher(categories, cipher);
         Subcategory subcategory = subcategoryService.findByCipher(category.getSubcategories(), cipher2);
-        //model.addAttribute("subcategory", subcategory);
-        //model.addAttribute("productList", productService.findBySubcategory(subcategory, offset));
 
         model.addAttribute("imageProductList", imageService.findBySubcategory(subcategory, offset));
         model.addAttribute("pageNumbers", productService.getPageNumbers(subcategory, offset));

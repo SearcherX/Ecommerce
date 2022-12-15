@@ -59,7 +59,8 @@
                                 th:if="${stat.last && pageNumbers[__${#lists.size(pageNumbers) - 2}__] + 1 != pageNumbers[__${#lists.size(pageNumbers) - 1}__]}">
                             <a class="page-link" href="#">...</a>
                         </li>
-                        <li th:class="|page-item ${page == offset ? 'pagination-widget__page_active' : ''}|" th:aria-current="${page == offset ? 'page' : ''}">
+                        <li th:class="|page-item ${page == offset ? 'pagination-widget__page_active' : ''}|"
+                            th:aria-current="${page == offset ? 'page' : ''}">
                             <a class="page-link"
                                th:href="@{|/catalog/${imageProductList[0].product.subcategory.category.cipher}/${imageProductList[0].product.subcategory.cipher}/${page}|}">[[${page}]]</a>
                         </li>
