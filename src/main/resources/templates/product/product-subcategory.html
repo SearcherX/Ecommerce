@@ -19,7 +19,7 @@
         </nav>
         <h1>[[${subcategory.subcategoryName}]]</h1>
         <div class="subcategory-products-container position-relative">
-            <div th:each="image, varStat: ${imageProductList}" class="subcategory-product">
+            <div th:each="image, varStat: ${productWithMainImageList}" class="subcategory-product">
                 <div class="img-container">
                     <img
                          th:src="@{|/img/${image.fileName}|}" th:alt="${image.product.productName}">
@@ -88,7 +88,7 @@
         if (e.target.className.includes("btn-cart")) {
             location.replace("/bucket")
         } else {
-            const imageProductList = [[${imageProductList}]];
+            const imageProductList = [[${productWithMainImageList}]];
             const index = +e.target.dataset.index;
             const url = "/bucket/add?productId=" + imageProductList[index]["product"]["id"];
 

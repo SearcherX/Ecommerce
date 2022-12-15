@@ -22,7 +22,7 @@ public class Product {
     private String description;
     private Double price;
     private Boolean present;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subcategory_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
