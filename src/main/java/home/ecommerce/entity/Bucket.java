@@ -1,5 +1,6 @@
 package home.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,9 @@ public class Bucket {
     private double totalPrices;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bucket", fetch = FetchType.EAGER)
-    private Set<BucketItem> bucketItem;
+    @OneToMany(mappedBy = "bucket", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OrderBy("id")
+    private Set<BucketItem> bucketItems;
 }

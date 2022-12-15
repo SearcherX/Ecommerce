@@ -27,7 +27,7 @@
                 <a th:href="@{|/catalog/${subcategory.category.cipher}/${subcategory.cipher}/${product.cipher}/details|}">
                     [[${product.productName}]]</a>
                 <div class="product-buy">
-                    <span>[[${#numbers.formatDecimal(product.price, 3, 'POINT', 2, 'COMMA')}]] ₽</span>
+                    <span>[[${#numbers.formatDecimal(product.price, 3, 'COMMA', 2, 'POINT')}]] ₽</span>
 
                     <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucket?.getBucketItem(), product)}"
                          th:remove="tag">
@@ -45,13 +45,39 @@
                 </div>
             </div>
         </div>
+        <div class="mt-4">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li th:class="|page-item ${offset <= pageNumbers[0] ? 'disabled': ''}|">
+                        <a class="page-link" th:href="${offset - 1}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <div th:each="page, stat: ${pageNumbers}" th:remove="tag">
+                        <li class="page-item disabled"
+                                th:if="${stat.last && pageNumbers[__${#lists.size(pageNumbers) - 2}__] + 1 != pageNumbers[__${#lists.size(pageNumbers) - 1}__]}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                        <li th:class="|page-item ${page == offset ? 'pagination-widget__page_active' : ''}|" th:aria-current="${page == offset ? 'page' : ''}">
+                            <a class="page-link"
+                               th:href="@{|/catalog/${subcategory.category.cipher}/${subcategory.cipher}/${page}|}">[[${page}]]</a>
+                        </li>
+                    </div>
+                    <li th:class="|page-item ${offset >= pageNumbers[__${#lists.size(pageNumbers) - 1}__] ? 'disabled': ''}|">
+                        <a class="page-link" th:href="${offset + 1}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
 </body>
 </html>
 
 <script th:inline="javascript">
-    document.querySelector(".btn-buy").addEventListener("click", async (e) => {
+    document.querySelectorAll(".btn-buy").forEach(btn => btn.addEventListener("click", async (e) => {
         if (e.target.className.includes("btn-cart")) {
             location.replace("/bucket")
         } else {
@@ -70,5 +96,5 @@
                 e.target.classList.add("btn-cart");
             }
         }
-    });
+    }))
 </script>

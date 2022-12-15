@@ -25,7 +25,8 @@ public class Subcategory {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Category category;
-    @OneToMany(mappedBy = "subcategory")
+    @OneToMany(mappedBy = "subcategory", fetch = FetchType.LAZY)
     @JsonIgnore
+    @OrderBy("price asc")
     private Set<Product> products;
 }

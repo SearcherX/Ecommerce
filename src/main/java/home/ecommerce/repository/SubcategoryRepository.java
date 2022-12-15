@@ -10,4 +10,5 @@ public interface SubcategoryRepository extends CrudRepository<Subcategory, Long>
     long count();
     List<Subcategory> findSubcategoriesByCategory(Category category);
     Subcategory findByCipher(String cipher);
+    List<Subcategory> findAllByOrderBySubcategoryNameAsc();
 }

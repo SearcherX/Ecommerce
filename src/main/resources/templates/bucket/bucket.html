@@ -14,22 +14,72 @@
             <th>Номер</th>
             <th>Название</th>
             <th>Цена</th>
-            <th>Колиечество</th>
+            <th>Количество</th>
+            <th>Удалить</th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="bucketItem, stat: ${bucket.getBucketItem()}">
+        <th:block th:each="bucketItem, stat: ${bucket.getBucketItems()}">
             <tr>
                 <td>[[${stat.index + 1}]]</td>
                 <td>[[${bucketItem.product.productName}]]</td>
-                <td>[[${bucketItem.totalPrice}]]</td>
-                <td>[[${bucketItem.quantity}]]</td>
-
+                <td th:id="|price-cel-${stat.index}|">[[${#numbers.formatDecimal(bucketItem.totalPrice, 3,
+                    'WHITESPACE', 2, 'POINT')}]]  ₽
+                </td>
+                <td>
+                    <div class="number-input">
+                        <button th:onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                th:data-index="${stat.index}"></button>
+                        <input class="quantity" min="1" name="quantity" th:value="${bucketItem.quantity}" type="number"
+                               th:id="|count-${stat.index}|" th:data-index="${stat.index}">
+                        <button th:onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                class="plus" th:data-index="${stat.index}"></button>
+                    </div>
+                </td>
+                <td>
+                    <a th:href="@{|/bucket/delete/${bucketItem.id}|}" class="dropdown-item">
+                        Удалить
+                    </a>
+                </td>
             </tr>
         </th:block>
         </tbody>
     </table>
+    <h3 class="total">
+        Количество товаров: [[${bucket.totalItems}]], Общая цена:
+        [[${#numbers.formatDecimal(bucket.totalPrices, 3, 'WHITESPACE', 2, 'POINT')}]] ₽
+    </h3>
 </div>
 <script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+<script th:inline="javascript">
+    const formatter = new Intl.NumberFormat('ru-RU', {
+        style: 'currency',
+        currency: 'RUB',
+    });
+
+
+    async function changeQuantity(e) {
+        const elemIndex = +e.target.dataset.index;
+        const counter = document.querySelector(`input[type=number]#count-${elemIndex}`);
+        const quantity = counter.value;
+        const bucketItemsList = [[${bucket.getBucketItems()}]];
+        const url = `/bucket/update?itemId=${bucketItemsList[elemIndex].id}&quantity=${quantity}`;
+
+        const response = await fetch(url, {
+            method: "POST",
+        });
+        const responseJson = await response.json();
+
+        document.querySelector(".total").textContent = `Количество товаров: ${responseJson.totalItems},
+        Общая цена: ${formatter.format(responseJson.totalPrices)}`;
+        document.querySelector("#price-cel-" + elemIndex).textContent = formatter.format(responseJson.bucketItems[elemIndex].totalPrice);
+    }
+
+    document.querySelectorAll(".number-input").forEach(div => {
+        div.querySelector(".quantity").addEventListener("input", changeQuantity);
+        div.querySelector("button:first-of-type").addEventListener("click", changeQuantity);
+        div.querySelector("button:last-of-type").addEventListener("click", changeQuantity);
+    });
+</script>
 </body>
 </html>

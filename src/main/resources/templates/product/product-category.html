@@ -14,11 +14,11 @@
         </nav>
         <h1>[[${category.categoryName}]]</h1>
         <div class="item-container">
-            <div th:each="subcategory: ${category.getSubcategories()}" class="item position-relative">
+            <div th:each="subcategory: ${subcategories}" class="item position-relative">
                 <div>
                     <img th:src="@{|/img/${subcategory.fileName}|}" th:alt="${subcategory.subcategoryName}">
                 </div>
-                <a th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}|}" class="stretched-link">[[${subcategory.subcategoryName}]]</a>
+                <a th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/1|}" class="stretched-link">[[${subcategory.subcategoryName}]]</a>
             </div>
         </div>
     </div>

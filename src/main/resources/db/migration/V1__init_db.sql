@@ -90,7 +90,7 @@ ALTER TABLE IF EXISTS image_t
     ADD CONSTRAINT image_product FOREIGN KEY (product_id) REFERENCES product_t ON DELETE CASCADE;
 
 ALTER TABLE IF EXISTS bucket_item_t
-    ADD CONSTRAINT bucket_item_bucket FOREIGN KEY (bucket_id) REFERENCES bucket_t;
+    ADD CONSTRAINT bucket_item_bucket FOREIGN KEY (bucket_id) REFERENCES bucket_t ON DELETE CASCADE;
 
 ALTER TABLE IF EXISTS bucket_item_t
     ADD CONSTRAINT bucket_item_product FOREIGN KEY (product_id) REFERENCES product_t;

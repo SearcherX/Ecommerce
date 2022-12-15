@@ -19,10 +19,10 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String login(Model model, Principal principal, HttpServletRequest request) throws Exception{
-        String referer = request.getHeader("Referer"); //Get previous URL before call '/login'
+    public String login(Model model, Principal principal, HttpServletRequest request) {
+        String referer = request.getHeader("Referer"); // получить предыдущий URL перед логином
 
-        //save referer URL to session, for later use on CustomAuthenticationSuccesshandler
+        // сохранить URL в сессию
         request.getSession().setAttribute(CustomAuthenticationSuccessHandler.REDIRECT_URL_SESSION_ATTRIBUTE_NAME, referer);
 
         return principal == null ?  "account/login" : "redirect:/";

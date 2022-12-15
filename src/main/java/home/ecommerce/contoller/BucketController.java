@@ -1,5 +1,7 @@
 package home.ecommerce.contoller;
 
+import home.ecommerce.entity.Bucket;
+import home.ecommerce.entity.BucketItem;
 import home.ecommerce.entity.Product;
 import home.ecommerce.entity.User;
 import home.ecommerce.service.BucketService;
@@ -25,16 +27,30 @@ public class BucketController {
     @GetMapping("")
     public String showBucket(Model model, Principal principal) {
         User user = userService.findByUsername(principal.getName());
-        model.addAttribute("bucket", bucketService.findByUser(user));
+        model.addAttribute("bucket", bucketService.getBucket(user));
         return "bucket/bucket";
     }
 
     @PostMapping("/add")
     @ResponseBody
-    public String addProduct(@RequestParam Long productId, Principal principal) {
+    public String addBucket(@RequestParam Long productId, Principal principal) {
         Product product = productService.findById(productId);
         User user = userService.findByUsername(principal.getName());
         bucketService.addItemToBucket(product, user);
         return "ok";
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public Bucket updateBucket(@RequestParam("itemId") Long bucketItemId, @RequestParam("quantity") Integer quantity, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        return bucketService.updateItemInBucket(bucketItemId, quantity, user);
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delProduct(@PathVariable Long id, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        bucketService.deleteItemFromBucket(id, user);
+        return "redirect:/bucket";
     }
 }

@@ -2,6 +2,7 @@ package home.ecommerce.service;
 
 import home.ecommerce.dto.SubcategoryDTO;
 import home.ecommerce.entity.Category;
+import home.ecommerce.entity.Product;
 import home.ecommerce.entity.Subcategory;
 import home.ecommerce.repository.SubcategoryRepository;
 import jakarta.transaction.Transactional;
@@ -9,10 +10,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -22,16 +20,26 @@ public class SubcategoryService {
     private final ModelMapper modelMapper;
 
     public List<Subcategory> listAllSubcategories() {
-        return ((List<Subcategory>) subcategoryRepository.findAll()).stream()
-                .sorted((Comparator.comparing(o -> o.getCategory().getCategoryName()))).toList();
+        //return ((List<Subcategory>) subcategoryRepository.findAll()).stream()
+                //.sorted((Comparator.comparing(o -> o.getCategory().getCategoryName()))).toList();
+        return subcategoryRepository.findAllByOrderBySubcategoryNameAsc();
+    }
+
+    @Transactional
+    public Set<Product> getProducts(Subcategory subcategory) {
+        return subcategory.getProducts();
     }
 
     public Subcategory findById(Long id) {
         return subcategoryRepository.findById(id).orElse(null);
     }
 
-    public Subcategory findByCipher(String cipher) {
-        return subcategoryRepository.findByCipher(cipher);
+    public Subcategory findByCipher(Set<Subcategory> subcategories, String cipher) {
+        for (Subcategory subcategory: subcategories) {
+            if (subcategory.getCipher().equals(cipher))
+                return subcategory;
+        }
+        return null;
     }
 
     public Subcategory save(Subcategory subcategory) {

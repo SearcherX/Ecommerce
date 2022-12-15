@@ -2,7 +2,10 @@ package home.ecommerce.service;
 
 import home.ecommerce.dto.CategoryDTO;
 import home.ecommerce.entity.Category;
+import home.ecommerce.entity.Subcategory;
 import home.ecommerce.repository.CategoryRepository;
+import jakarta.persistence.OrderBy;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -19,15 +23,26 @@ public class CategoryService {
     private final ModelMapper modelMapper;
 
     public List<Category> listAllCategories() {
-        return (List<Category>) categoryRepository.findAll();
+
+        //return (List<Category>) categoryRepository.findAll();
+        return categoryRepository.findAllByOrderByCategoryNameAsc();
+    }
+
+    @Transactional
+    public Set<Subcategory> getSubcategories(Category category) {
+        return category.getSubcategories();
     }
 
     public Category findById(Long id) {
         return categoryRepository.findById(id).orElse(null);
     }
 
-    public Category findByCipher(String cipher) {
-        return categoryRepository.findByCipher(cipher);
+    public Category findByCipher(List<Category> categories, String cipher) {
+        for (Category category: categories) {
+            if (category.getCipher().equals(cipher))
+                return category;
+        }
+        return null;
     }
 
     public Category save(Category category) {

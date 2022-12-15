@@ -26,7 +26,7 @@ public class ProductController {
 
     @GetMapping("")
     public String showProducts(Model model) {
-        model.addAttribute("productList", productService.listAllProducts());
+        //model.addAttribute("productList", productService.listAllProducts());
         model.addAttribute("subcategoriesCount", subcategoryService.count());
         return "admin/product/product-list";
     }

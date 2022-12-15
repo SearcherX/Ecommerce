@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @AllArgsConstructor
@@ -29,18 +30,25 @@ public class CatalogController {
 
     @GetMapping("/catalog/{cipher}")
     public String showSubcategories(Model model, @PathVariable String cipher) {
-        model.addAttribute("categoriesList", categoryService.listAllCategories());
-        Category category = categoryService.findByCipher(cipher);
+        List<Category> categories = categoryService.listAllCategories();
+        model.addAttribute("categoriesList", categories);
+        Category category = categoryService.findByCipher(categories, cipher);
         model.addAttribute("category", category);
+        model.addAttribute("subcategories", categoryService.getSubcategories(category));
         return "product/product-category";
     }
 
-    @GetMapping("/catalog/{cipher}/{cipher2}")
-    public String showProducts(Model model, @PathVariable String cipher, @PathVariable String cipher2, Principal principal) {
-        model.addAttribute("categoriesList", categoryService.listAllCategories());
-        Subcategory subcategory = subcategoryService.findByCipher(cipher2);
+    @GetMapping("/catalog/{cipher}/{cipher2}/{offset}")
+    public String showProducts(Model model, @PathVariable String cipher,
+                               @PathVariable String cipher2, @PathVariable("offset") Integer offset,
+                               Principal principal) {
+        List<Category> categories = categoryService.listAllCategories();
+        model.addAttribute("categoriesList", categories);
+        Category category = categoryService.findByCipher(categories, cipher);
+        Subcategory subcategory = subcategoryService.findByCipher(category.getSubcategories(), cipher2);
         model.addAttribute("subcategory", subcategory);
-        model.addAttribute("productList", productService.findBySubcategory(subcategory));
+        model.addAttribute("productList", productService.findBySubcategory(subcategory, offset));
+        model.addAttribute("pageNumbers", productService.getPageNumbers(subcategory, offset));
         if (principal != null) {
             User user = userService.findByUsername(principal.getName());
             model.addAttribute("bucket", bucketService.findByUser(user));

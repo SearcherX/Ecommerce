@@ -18,5 +18,6 @@ public class Category {
     private String cipher;
     private String fileName;
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    @OrderBy("subcategoryName asc")
     private Set<Subcategory> subcategories;
 }
