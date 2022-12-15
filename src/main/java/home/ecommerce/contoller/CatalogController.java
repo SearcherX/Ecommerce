@@ -44,15 +44,19 @@ public class CatalogController {
                                Principal principal) {
         List<Category> categories = categoryService.listAllCategories();
         model.addAttribute("categoriesList", categories);
+
         Category category = categoryService.findByCipher(categories, cipher);
         Subcategory subcategory = subcategoryService.findByCipher(category.getSubcategories(), cipher2);
         model.addAttribute("subcategory", subcategory);
         model.addAttribute("productList", productService.findBySubcategory(subcategory, offset));
+
         model.addAttribute("pageNumbers", productService.getPageNumbers(subcategory, offset));
+
         if (principal != null) {
             User user = userService.findByUsername(principal.getName());
             model.addAttribute("bucketItems", bucketService.findByUser(user).getBucketItems());
         }
+
         return "product/product-subcategory";
     }
 

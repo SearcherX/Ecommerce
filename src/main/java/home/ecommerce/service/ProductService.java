@@ -36,7 +36,7 @@ public class ProductService {
     }
 
     // метод формирования списка страниц для пагинации
-    // пример [x-2, x-1, x, x+1, last], где x - текущая страница, last - последняя
+    // пример [1,..., x-2, x-1, x, x+1, x+2, ...,last], где x - текущая страница, last - последняя
     public List<Integer> getPageNumbers(Subcategory subcategory, int currentPage) {
         int productCount = (int) productRepository.countBySubcategory(subcategory);
         int pageCount = productCount / pageSize + (productCount % pageSize == 0 ? 0 : 1);
@@ -45,34 +45,25 @@ public class ProductService {
             throw new RuntimeException("Нет такой страницы");
 
         int startPage;
-        int endPage = currentPage + 1;
+        int endPage = currentPage + 2;
 
         // добавить страницы слева
-        // если слева нельзя добавить страницы, то добавить справа
-        if (currentPage - 2 < 1) {
-            endPage += 1 - (currentPage - 2);
-            startPage = 1;
-        } else {
-            startPage = currentPage - 2;
-        }
+        startPage = Math.max(currentPage - 2, 2);
 
         // добавить страницы справа
-        // если справа нельзя добавить страницы, то добавить слева
-        if (currentPage + 1 > pageCount - 1) {
-            startPage -= (currentPage + 1) - pageCount + 1;
+        if (currentPage + 2 > pageCount - 1) {
             endPage = currentPage;
         } else {
             if (currentPage >= endPage)
-                endPage = currentPage + 1;
+                endPage = currentPage + 2;
         }
 
         // проверить, чтобы страницы не вылезли за диапазон
-        if (startPage < 1)
-            startPage = 1;
         if (endPage > pageCount)
             endPage = pageCount;
 
         List<Integer> pageNumbers = new ArrayList<>();
+        pageNumbers.add(1);
         for (int i = startPage; i <= endPage; i++) {
             pageNumbers.add(i);
         }

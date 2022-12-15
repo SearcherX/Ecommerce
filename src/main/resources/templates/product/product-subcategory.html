@@ -54,6 +54,7 @@
                         </a>
                     </li>
                     <div th:each="page, stat: ${pageNumbers}" th:remove="tag">
+<!--                        добавить ... перед последней страницей-->
                         <li class="page-item disabled"
                                 th:if="${stat.last && pageNumbers[__${#lists.size(pageNumbers) - 2}__] + 1 != pageNumbers[__${#lists.size(pageNumbers) - 1}__]}">
                             <a class="page-link" href="#">...</a>
@@ -61,6 +62,11 @@
                         <li th:class="|page-item ${page == offset ? 'pagination-widget__page_active' : ''}|" th:aria-current="${page == offset ? 'page' : ''}">
                             <a class="page-link"
                                th:href="@{|/catalog/${subcategory.category.cipher}/${subcategory.cipher}/${page}|}">[[${page}]]</a>
+                        </li>
+<!--                        добавить ... после первой страницы-->
+                        <li class="page-item disabled"
+                            th:if="${stat.first && pageNumbers[0] + 1 != pageNumbers[1]}">
+                            <a class="page-link" href="#">...</a>
                         </li>
                     </div>
                     <li th:class="|page-item ${offset >= pageNumbers[__${#lists.size(pageNumbers) - 1}__] ? 'disabled': ''}|">
