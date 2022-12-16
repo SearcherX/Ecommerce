@@ -9,6 +9,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 
 public interface ProductRepository extends CrudRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
-    List<Product> findAllBySubcategoryOrderByPrice(Subcategory subcategory, Pageable pageable);
+    List<Product> findBySubcategoryOrderByPrice(Subcategory subcategory, Pageable pageable);
     long countBySubcategory(Subcategory subcategory);
 }

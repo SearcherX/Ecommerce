@@ -52,7 +52,7 @@ public class CatalogController {
 
         model.addAttribute("category", category);
         model.addAttribute("subcategory", subcategory);
-        model.addAttribute("productWithMainImageList", imageService.findBySubcategory(subcategory, offset));
+        model.addAttribute("productList", productService.findBySubcategoryWithMainImage(subcategory, offset));
         model.addAttribute("pageNumbers", productService.getPageNumbers(subcategory, offset));
 
         if (principal != null) {

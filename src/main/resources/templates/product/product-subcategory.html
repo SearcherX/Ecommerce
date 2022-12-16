@@ -19,17 +19,18 @@
         </nav>
         <h1>[[${subcategory.subcategoryName}]]</h1>
         <div class="subcategory-products-container position-relative">
-            <div th:each="image, varStat: ${productWithMainImageList}" class="subcategory-product">
+            <div th:each="product, varStat: ${productList}" class="subcategory-product">
                 <div class="img-container">
                     <img
-                         th:src="@{|/img/${image.fileName}|}" th:alt="${image.product.productName}">
+                         th:src="@{|/img/${product.files.size() > 0 ? product.files.get(0).fileName : 'no image.jpeg'}|}"
+                         th:alt="${product.productName}">
                 </div>
-                <a th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/${image.product.cipher}/details|}">
-                    [[${image.product.productName}]]</a>
+                <a th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/${product.cipher}/details|}">
+                    [[${product.productName}]]</a>
                 <div class="product-buy">
-                    <span>[[${#numbers.formatDecimal(image.product.price, 3, 'WHITESPACE', 2, 'POINT')}]] ₽</span>
+                    <span>[[${#numbers.formatDecimal(product.price, 3, 'WHITESPACE', 2, 'POINT')}]] ₽</span>
 
-                    <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucketItems, image.product)}"
+                    <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucketItems, product)}"
                          th:remove="tag">
                         <button th:if="${condition}" class="btn-buy stat-link btn-cart">
                             В корзине
@@ -88,9 +89,9 @@
         if (e.target.className.includes("btn-cart")) {
             location.replace("/bucket")
         } else {
-            const imageProductList = [[${productWithMainImageList}]];
+            const productList = [[${productList}]];
             const index = +e.target.dataset.index;
-            const url = "/bucket/add?productId=" + imageProductList[index]["product"]["id"];
+            const url = "/bucket/add?productId=" + productList[index]["id"];
 
             const response = await fetch(url, {
                 method: "POST",

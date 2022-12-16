@@ -32,6 +32,10 @@ public class ImageService {
         return imageRepository.findById(id).orElse(null);
     }
 
+    public Image findMainImageByProduct(Product product) {
+        return imageRepository.findByProductAndFileNameContains(product, "main");
+    }
+
     public Image save(Image image) {
         return imageRepository.save(image);
     }

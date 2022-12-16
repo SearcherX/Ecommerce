@@ -2,11 +2,14 @@ package home.ecommerce.service;
 
 import home.ecommerce.dto.ProductDTO;
 import home.ecommerce.dto.SubcategoryDTO;
+import home.ecommerce.entity.Image;
 import home.ecommerce.entity.Product;
 import home.ecommerce.entity.Subcategory;
 import home.ecommerce.repository.ImageRepository;
 import home.ecommerce.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,10 +21,12 @@ import java.util.*;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ImageService imageService;
     private final ModelMapper modelMapper;
 
-    public ProductService(ProductRepository productRepository, ModelMapper modelMapper) {
+    public ProductService(ProductRepository productRepository, ImageService imageService, ModelMapper modelMapper) {
         this.productRepository = productRepository;
+        this.imageService = imageService;
         this.modelMapper = modelMapper;
     }
 
@@ -32,9 +37,28 @@ public class ProductService {
         return productRepository.findById(id).orElse(null);
     }
 
-//    public List<Product> findBySubcategory(Subcategory subcategory, Integer offset) {
-//        return productRepository.findAllBySubcategoryOrderByPrice(subcategory, PageRequest.of(offset - 1, pageSize));
-//    }
+    // метод загрузки товара со всеми зображениями
+    @Transactional
+    public Product findByIdWithImages(Long id) {
+        return findById(id);
+    }
+
+    //метод загрузки списка товаров только с главным изображением
+    public List<Product> findBySubcategoryWithMainImage(Subcategory subcategory, Integer offset) {
+        List<Product> products = productRepository.findBySubcategoryOrderByPrice(subcategory, PageRequest.of(offset - 1, pageSize));
+        for (Product product: products) {
+            Image image = imageService.findMainImageByProduct(product);
+
+            //если нет изображения, то сделать пустым массив
+            List<Image> files = new ArrayList<>();
+
+            if (image != null)
+                files.add(image);
+
+            product.setFiles(files);
+        }
+        return products;
+    }
 
 
     // метод формирования списка страниц для пагинации
