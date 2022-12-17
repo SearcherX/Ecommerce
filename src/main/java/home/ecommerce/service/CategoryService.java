@@ -7,6 +7,7 @@ import home.ecommerce.repository.CategoryRepository;
 import jakarta.persistence.OrderBy;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,11 @@ public class CategoryService {
     private final StorageService storageService;
     private final ModelMapper modelMapper;
 
+    @Transactional
     public List<Category> listAllCategories() {
-
-        //return (List<Category>) categoryRepository.findAll();
-        return categoryRepository.findAllByOrderByCategoryNameAsc();
+        List<Category> categories = categoryRepository.findAllByOrderByCategoryNameAsc();
+        categories.forEach(category -> Hibernate.initialize(category.getSubcategories()));
+        return categories;
     }
 
     @Transactional

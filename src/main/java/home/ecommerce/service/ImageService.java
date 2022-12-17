@@ -36,6 +36,14 @@ public class ImageService {
         return imageRepository.findByProductAndFileNameContains(product, "main");
     }
 
+    public Image findMainImageFromList(List<Image> images) {
+        for (Image image: images) {
+            if (image.getFileName().contains("main"))
+                return image;
+        }
+        return null;
+    }
+
     public Image save(Image image) {
         return imageRepository.save(image);
     }

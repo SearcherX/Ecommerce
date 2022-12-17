@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface ProductRepository extends CrudRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
     List<Product> findBySubcategoryOrderByPrice(Subcategory subcategory, Pageable pageable);
+    Product findByCipher(String cipher);
     long countBySubcategory(Subcategory subcategory);
 }

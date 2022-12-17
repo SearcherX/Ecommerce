@@ -17,7 +17,7 @@ public class Category {
     private String categoryName;
     private String cipher;
     private String fileName;
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @OrderBy("subcategoryName asc")
     private Set<Subcategory> subcategories;
 }

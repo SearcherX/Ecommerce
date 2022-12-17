@@ -1,9 +1,6 @@
 package home.ecommerce.contoller;
 
-import home.ecommerce.entity.Category;
-import home.ecommerce.entity.Image;
-import home.ecommerce.entity.Subcategory;
-import home.ecommerce.entity.User;
+import home.ecommerce.entity.*;
 import home.ecommerce.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -61,6 +58,19 @@ public class CatalogController {
         }
 
         return "product/product-subcategory";
+    }
+
+    @GetMapping("/catalog/product/{cipher}")
+    public String showProductDetails(Model model, @PathVariable String cipher, Principal principal) {
+        Product product = productService.findByCipherFully(cipher);
+        model.addAttribute("product", product);
+
+        if (principal != null) {
+            User user = userService.findByUsername(principal.getName());
+            model.addAttribute("bucketItems", bucketService.findByUser(user).getBucketItems());
+        }
+
+        return "product/product-details";
     }
 
 

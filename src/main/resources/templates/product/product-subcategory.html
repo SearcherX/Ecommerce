@@ -25,7 +25,7 @@
                          th:src="@{|/img/${product.files.size() > 0 ? product.files.get(0).fileName : 'no image.jpeg'}|}"
                          th:alt="${product.productName}">
                 </div>
-                <a th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/${product.cipher}/details|}">
+                <a th:href="@{|/catalog/product/${product.cipher}|}">
                     [[${product.productName}]]</a>
                 <div class="product-buy">
                     <span>[[${#numbers.formatDecimal(product.price, 3, 'WHITESPACE', 2, 'POINT')}]] ₽</span>

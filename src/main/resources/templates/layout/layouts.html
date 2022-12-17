@@ -6,10 +6,12 @@
     <title th:replace="${title}">Webshop</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.2.2/dist/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <link th:href="@{/webjars/font-awesome/6.2.0/css/all.css}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <header th:fragment="menu" class="sticky-top">
-    <div class="container py-2 bg-white">
+    <div class="container-fluid bg-white">
+    <div class="container py-2">
         <div class="row">
             <div class="col-6">
                 <ul class="nav d-flex justify-content-start">
@@ -51,6 +53,7 @@
                 </ul>
             </div>
         </div>
+    </div>
     </div>
 </header>
 </body>

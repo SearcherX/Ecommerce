@@ -31,7 +31,7 @@ class ProductServiceTest {
 
     @Test
     void findByIdWithImages() {
-        Product product = productService.findByIdWithImages(1L);
+        Product product = productService.findByCipherFully("laptop-digma-eve-14");
         System.out.println(product);
     }
 

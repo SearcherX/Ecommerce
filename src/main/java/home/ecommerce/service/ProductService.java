@@ -39,17 +39,20 @@ public class ProductService {
 
     // метод загрузки товара со всеми зображениями
     @Transactional
-    public Product findByIdWithImages(Long id) {
-        return findById(id);
+    public Product findByCipherFully(String cipher) {
+        Product product = productRepository.findByCipher(cipher);
+        Hibernate.initialize(product.getFiles());
+        Hibernate.initialize(product.getSubcategory().getCategory());
+        return product;
     }
 
-    //метод загрузки списка товаров только с главным изображением
+    // метод загрузки списка товаров только с главным изображением
     public List<Product> findBySubcategoryWithMainImage(Subcategory subcategory, Integer offset) {
         List<Product> products = productRepository.findBySubcategoryOrderByPrice(subcategory, PageRequest.of(offset - 1, pageSize));
-        for (Product product: products) {
+        for (Product product : products) {
             Image image = imageService.findMainImageByProduct(product);
 
-            //если нет изображения, то сделать пустым массив
+            //если нет изображения, то сделать пустым массив изображений
             List<Image> files = new ArrayList<>();
 
             if (image != null)
@@ -66,6 +69,8 @@ public class ProductService {
     public List<Integer> getPageNumbers(Subcategory subcategory, int currentPage) {
         int productCount = (int) productRepository.countBySubcategory(subcategory);
         int pageCount = productCount / pageSize + (productCount % pageSize == 0 ? 0 : 1);
+        int leftDif = 2;
+        int rightDif = 2;
 
         if (pageCount <= 1)
             return new ArrayList<>(List.of(1));
@@ -74,18 +79,18 @@ public class ProductService {
             throw new RuntimeException("Нет такой страницы");
 
         int startPage;
-        int endPage = currentPage + 2;
+        int endPage;
 
         // добавить страницы слева
-        startPage = Math.max(currentPage - 2, 2);
+        startPage = Math.max(currentPage - leftDif, 2);
 
         // добавить страницы справа
-        if (currentPage + 2 > pageCount - 1) {
-            endPage = Math.min(currentPage + 2, pageCount - 1);
-        }
+        endPage = Math.min(currentPage + rightDif, pageCount - 1);
 
         List<Integer> pageNumbers = new ArrayList<>();
+        // в начало добавить первую страницу
         pageNumbers.add(1);
+
         for (int i = startPage; i <= endPage; i++) {
             pageNumbers.add(i);
         }

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+    <title>[[${product.productName}]]</title>
+</head>
+<body class="col bg-color1">
+<header th:replace="~{layout/layouts.html :: menu}"></header>
+<div class="container">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/catalog}">Каталог товаров</a></li>
+            <li class="breadcrumb-item">
+                <a th:href="@{|/catalog/${product.subcategory.category.cipher}|}">
+                    [[${product.subcategory.category.categoryName}]]
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a th:href="@{|/catalog/${product.subcategory.category.cipher}/${product.subcategory.cipher}/1|}">
+                    [[${product.subcategory.subcategoryName}]]
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">[[${product.productName}]]</li>
+        </ol>
+    </nav>
+    <h1>[[${product.productName}]]</h1>
+    <div class="bg-white">
+        <div class="row">
+            <div class="col-6 mr-4">
+                <div th:if="${product.files.size() <= 1}" class="p-5">
+                    <img th:src="@{|/img/${product.files.size() == 0 ? 'no image.jpeg' : product.files.get(0).fileName}|}"
+                         class="d-block w-100"
+                         th:alt="${product.productName}">
+                </div>
+
+                <div th:if="${product.files.size() > 1}" id="carouselExampleIndicators" class="carousel carousel-dark slide" data-bs-ride="true">
+                    <div class="carousel-indicators">
+                        <div th:each="image, stat: ${product.files}"
+                             th:with="condition=${image.fileName.contains('main')}" th:remove="tag">
+                            <button th:if="${condition}" type="button" data-bs-target="#carouselExampleIndicators"
+                                    class="active" aria-current="true" th:data-bs-slide-to="${stat.index}"
+                                    th:aria-label="|Slide ${stat.index + 1}|">
+                            </button>
+                            <button th:unless="${condition}" type="button" data-bs-target="#carouselExampleIndicators"
+                                    th:data-bs-slide-to="${stat.index}" th:aria-label="|Slide ${stat.index + 1}|">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="carousel-inner">
+                        <div th:class="|carousel-item ${image.fileName.contains('main') ? 'active' : ''}|"
+                             th:each="image: ${product.files}">
+                            <img th:src="@{|/img/${image.fileName}|}" class="d-block w-100"
+                                 th:alt="${product.productName}">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="prev">
+<!--                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="next">
+<!--                        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+                        <i class="fa-solid fa-chevron-right"></i>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-6 p-5">
+                <div class="mb-4">
+                    [[${product.description}]]
+                </div>
+                <div class="product-stat mb-4">
+                    <a th:href="@{#}" class="stat-link">Звезды</a>
+                    <a th:href="@{#}" class="stat-link">Отзывы</a>
+                </div>
+                <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucketItems, product)}"
+                     class="details-buy">
+                    <div class="row">
+                        <div class="col-8 d-flex align-items-center fw-bold fs-4">
+                            [[${#numbers.formatDecimal(product.price, 3, 'WHITESPACE', 2, 'POINT')}]] ₽
+                        </div>
+                        <div class="col-4 d-flex align-items-center details-buy-container">
+                            <button th:if="${condition}" class="btn-buy stat-link btn-cart">
+                                В корзине
+                            </button>
+                            <button th:unless="${condition}" class="btn-buy stat-link w-100 justify-content-center">
+                                Купить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+</body>
+</html>
+
+<script th:inline="javascript">
+    document.querySelectorAll(".btn-buy").forEach(btn => btn.addEventListener("click", async (e) => {
+        if (e.target.className.includes("btn-cart")) {
+            location.replace("/bucket")
+        } else {
+            const product = [[${product}]];
+            const url = "/bucket/add?productId=" + product.id;
+
+            const response = await fetch(url, {
+                method: "POST",
+            });
+
+            if (response.url.includes("/login")) {
+                location.replace(response.url);
+            } else {
+                e.target.textContent = "В корзине";
+                e.target.classList.add("btn-cart");
+            }
+        }
+    }))
+</script>
