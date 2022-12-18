@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
   <title>Админка</title>
 </head>
 <body class="vh-100 d-flex flex-column">
@@ -21,7 +21,7 @@
           <a class="nav-link" th:href="@{/admin/subcategories}">Подкатегории</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/admin/products}">Товары</a>
+          <a class="nav-link" th:href="@{/admin/products/?offset=1}">Товары</a>
         </li>
       </ul>
     </div>

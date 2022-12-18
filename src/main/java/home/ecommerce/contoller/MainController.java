@@ -1,6 +1,8 @@
 package home.ecommerce.contoller;
 
+import home.ecommerce.entity.Product;
 import home.ecommerce.service.CategoryService;
+import home.ecommerce.service.ProductService;
 import home.ecommerce.service.security.CustomAuthenticationSuccessHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -10,11 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class MainController {
-    @GetMapping("")
-    public String showWelcomePage() {
+    private final ProductService productService;
+    @GetMapping("/")
+    public String showWelcomePage(Model model) {
+        model.addAttribute("popularProducts", productService.findTop10Popular());
+        model.addAttribute("newProducts", productService.findTop10New());
         return "index";
     }
 

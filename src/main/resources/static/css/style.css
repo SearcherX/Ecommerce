@@ -49,7 +49,15 @@ form {
 
 .search-container input {
     border: none;
-    background-color: inherit;
+    background-color: white !important;
+}
+
+/*Убрать смену цвета при выборе автозаполнения строки поиска*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
 .search-container input:focus {
@@ -261,18 +269,6 @@ td {
     margin-right: 4px;
 }
 
-button i {
-    color: darkorange;
-    font-size: 3em;
-}
-
-.carousel-dark .carousel-indicators [data-bs-target] {
-    background-color: darkorange;
-}
-
-.carousel-indicators .active {
-    background-color: red !important;
-}
 
 input[type="number"] {
     -webkit-appearance: textfield;
@@ -330,7 +326,6 @@ input[type=number]::-webkit-outer-spin-button {
     padding: .5rem;
     border: solid #ddd;
     border-width: 0 2px;
-    /*font-size: 1.5rem;*/
     height: 2rem;
     font-weight: bold;
     text-align: center;
@@ -342,7 +337,45 @@ input[type=number]::-webkit-outer-spin-button {
     color: #fc8507;
 }
 
-.carousel-dark .carousel-control-next-icon, .carousel-dark .carousel-control-prev-icon {
-    filter: invert(1) grayscale(50);
-    color: darkorange;
+.carousel-dark .carousel-indicators [data-bs-target] {
+    background-color: darkorange;
 }
+
+.carousel-indicators .active {
+    background-color: red !important;
+}
+
+.carousel-item {
+    text-align: center;
+    height: 100%;
+    position: relative;
+}
+
+.carousel-item>img {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: 80%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.carousel-control-next, .carousel-control-prev {
+    opacity: 1;
+}
+
+.carousel-control-prev > i,
+.carousel-control-next > i {
+    color: darkorange;
+    font-size: 2em;
+}
+
+.carousel-control-prev > i:hover,
+.carousel-control-next > i:hover {
+    color: red;
+}
+

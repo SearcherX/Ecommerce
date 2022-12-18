@@ -1,12 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{::link})}">
     <title>Главная</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/carousel.css}"/>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 bg-color1">
 <header th:replace="~{layout/layouts.html :: menu}"></header>
-<h1 class="text-center">Добро пожаловать в будущий интернет-магазин</h1>
-<a th:href="@{/catalog}">Товары</a>
-<script th:src="@{webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+<div class="container">
+    <h2 class="text-center">Популярные товары</h2>
+    <div class="row mx-auto my-auto justify-content-center">
+        <div id="popularCarousel" class="carousel slide p-2 col-8" data-bs-ride="carousel">
+            <div class="carousel-inner h-100" role="listbox">
+                <div th:each="product, stat: ${popularProducts}"
+                     th:class="|h-100 carousel-item ${stat.index == 0 ? 'active' : ''}|">
+                    <div class="col-3 bg-white h-100 carousel-item-slide position-relative">
+                        <a th:href="@{|/catalog/product/${product.cipher}|}" class="stretched-link">
+                        </a>
+                        <div class="h-100">
+                            <img th:src="@{|/img/${product.files.get(0).fileName}|}"
+                                 th:alt="${product.productName}" class="h-100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev bg-transparent w-aut" href="#popularCarousel" role="button"
+               data-bs-slide="prev">
+                <!--                <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+                <i class="fa-solid fa-chevron-left"></i>
+            </a>
+            <a class="carousel-control-next bg-transparent w-aut" href="#popularCarousel" role="button"
+               data-bs-slide="next">
+                <!--                <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <h2 class="text-center">Новинки</h2>
+    <div class="row mx-auto my-auto justify-content-center">
+        <div id="newCarousel" class="carousel slide p-2 col-8" data-bs-ride="carousel">
+            <div class="carousel-inner h-100" role="listbox">
+                <div th:each="product, stat: ${newProducts}"
+                     th:class="|h-100 carousel-item ${stat.index == 0 ? 'active' : ''}|">
+                    <div class="col-3 bg-white h-100 carousel-item-slide position-relative">
+                        <a th:href="@{|/catalog/product/${product.cipher}|}" class="stretched-link">
+                        </a>
+                        <div class="h-100">
+                            <img th:src="@{|/img/${product.files.get(0).fileName}|}"
+                                 th:alt="${product.productName}" class="h-100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev bg-transparent w-aut" href="#newCarousel" role="button"
+               data-bs-slide="prev">
+                <!--                <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+                <i class="fa-solid fa-chevron-left"></i>
+            </a>
+            <a class="carousel-control-next bg-transparent w-aut" href="#newCarousel" role="button"
+               data-bs-slide="next">
+                <!--                <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+<script th:src="@{/js/carousel-multiframe.js}"></script>
 </body>
 </html>

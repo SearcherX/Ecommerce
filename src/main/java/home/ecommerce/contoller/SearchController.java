@@ -27,10 +27,12 @@ public class SearchController {
     public String showSimpleFilteredProducts(@RequestParam(required = false, defaultValue = "", name = "str") String str,
                                              @RequestParam(defaultValue = "1", name = "offset") Integer offset,
                                              Model model, Principal principal) {
+        Page<Product> productPage;
         if (str == null || str.isEmpty())
-            return "redirect:/catalog";
+            productPage = productService.findSortedAll(offset);
+        else
+            productPage = productService.findBySimpleFilterWithMainImage(str, offset);
 
-        Page<Product> productPage = productService.findBySimpleFilterWithMainImage(str, offset);
         model.addAttribute("offset", offset);
         model.addAttribute("simpleFilter", str);
         model.addAttribute("productPage", productPage);

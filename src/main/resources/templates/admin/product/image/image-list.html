@@ -28,7 +28,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <th:block th:each="image: ${imagesList}">
+                        <th:block th:each="image: ${product.files}">
                             <tr>
                                 <td>[[${image.id}]]</td>
                                 <td><a th:href="@{${'/img/' + image.fileName}}" target="_blank">Ссылка</a></td>

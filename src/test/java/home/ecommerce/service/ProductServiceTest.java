@@ -42,4 +42,10 @@ class ProductServiceTest {
         Page<Product> products = productService.findBySubcategoryWithMainImage(subcategory, 1);
         System.out.println(products);
     }
+
+    @Test
+    void findTop10Popular() {
+        List<Product> top10 = productService.findTop10Popular();
+        System.out.println(top10);
+    }
 }

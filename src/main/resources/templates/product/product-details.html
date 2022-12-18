@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
     <title>[[${product.productName}]]</title>
 </head>
 <body class="col bg-color1">
@@ -33,10 +33,10 @@
                          th:alt="${product.productName}">
                 </div>
 
-                <div th:if="${product.files.size() > 1}" id="carouselExampleIndicators" class="carousel carousel-dark slide" data-bs-ride="true">
+                <div th:if="${product.files.size() > 1}" id="carouselExampleIndicators" class="carousel carousel-dark slide h-100" data-bs-ride="true">
                     <div class="carousel-indicators">
                         <div th:each="image, stat: ${product.files}"
-                             th:with="condition=${image.fileName.contains('main')}" th:remove="tag">
+                             th:with="condition=${image.fileName.contains('main') || (!image.fileName.contains('main') && stat.last)}" th:remove="tag">
                             <button th:if="${condition}" type="button" data-bs-target="#carouselExampleIndicators"
                                     class="active" aria-current="true" th:data-bs-slide-to="${stat.index}"
                                     th:aria-label="|Slide ${stat.index + 1}|">
@@ -46,10 +46,10 @@
                             </button>
                         </div>
                     </div>
-                    <div class="carousel-inner">
-                        <div th:class="|carousel-item ${image.fileName.contains('main') ? 'active' : ''}|"
-                             th:each="image: ${product.files}">
-                            <img th:src="@{|/img/${image.fileName}|}" class="d-block w-100"
+                    <div class="carousel-inner h-100">
+                        <div th:class="|carousel-item ${image.fileName.contains('main') ? 'active' : (stat.last ? 'active' : '')}|"
+                             th:each="image, stat: ${product.files}">
+                            <img th:src="@{|/img/${image.fileName}|}" class="img-fluid"
                                  th:alt="${product.productName}">
                         </div>
                     </div>
@@ -70,6 +70,9 @@
             <div class="col-6 p-5">
                 <div class="mb-4">
                     [[${product.description}]]
+                </div>
+                <div class="mb-4">
+                    Дата регистрации: [[${#dates.format(product.registerDate, 'dd MMMM yyyy')}]] года
                 </div>
                 <div class="product-stat mb-4">
                     <a th:href="@{#}" class="stat-link">Звезды</a>

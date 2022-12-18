@@ -24,7 +24,6 @@ public class ImageController {
     public String showImages(Model model, @PathVariable Long id) {
         Product product = productService.findById(id);
         model.addAttribute("product", product);
-        model.addAttribute("imagesList", product.getFiles());
         return "admin/product/image/image-list";
     }
 

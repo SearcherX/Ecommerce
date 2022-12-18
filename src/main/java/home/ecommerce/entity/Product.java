@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -21,6 +22,8 @@ public class Product {
     private String cipher;
     private String description;
     private Double price;
+    private Integer purchasesNumber;
+    private Date registerDate;
     private Boolean present;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subcategory_id")

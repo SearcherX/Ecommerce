@@ -24,9 +24,9 @@ public class ProductController {
     private final CategoryService categoryService;
     private final SubcategoryService subcategoryService;
 
-    @GetMapping("")
-    public String showProducts(Model model) {
-        //model.addAttribute("productList", productService.listAllProducts());
+    @GetMapping("/")
+    public String showProducts(Model model, @RequestParam Integer offset) {
+        model.addAttribute("productList", productService.findSortedAllWithSubcategory(offset, 30));
         model.addAttribute("subcategoriesCount", subcategoryService.count());
         return "admin/product/product-list";
     }
@@ -54,13 +54,13 @@ public class ProductController {
             productService.add(productDTO);
         else
             productService.update(productDTO, id);
-        return "redirect:/admin/products";
+        return "redirect:/admin/products/?offset=1";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return "redirect:/admin/products";
+        return "redirect:/admin/products/?offset=1";
     }
 
     @GetMapping("/subcategories")

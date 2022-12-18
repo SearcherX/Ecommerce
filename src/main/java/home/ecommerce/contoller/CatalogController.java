@@ -66,7 +66,7 @@ public class CatalogController {
     public String showProductDetails(Model model, @PathVariable String cipher, Principal principal) {
         Product product = productService.findByCipherFully(cipher);
         model.addAttribute("product", product);
-
+        
         if (principal != null) {
             User user = userService.findByUsername(principal.getName());
             model.addAttribute("bucketItems", bucketService.findByUser(user).getBucketItems());

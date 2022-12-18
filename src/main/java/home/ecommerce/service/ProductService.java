@@ -31,14 +31,31 @@ public class ProductService {
 
     @Value("${pageSize}")
     private Integer pageSize;
-
     @Value("${leftDif}")
     private int leftDif;
     @Value("${rightDif}")
     private int rightDif;
 
+    public Page<Product> findSortedAll(Integer offset) {
+        Page<Product> products = productRepository.findByOrderByPrice(PageRequest.of(offset - 1, pageSize));
+        setMainImage(products);
+        return products;
+    }
+
+    @Transactional
+    public Page<Product> findSortedAllWithSubcategory(Integer offset, Integer pageSize) {
+        Page<Product> products = productRepository.findByOrderByPrice(PageRequest.of(offset - 1, pageSize));
+        products.forEach(product -> Hibernate.initialize(product.getSubcategory()));
+        setMainImage(products);
+        return products;
+    }
+
+    @Transactional
     public Product findById(Long id) {
-        return productRepository.findById(id).orElse(null);
+        Product product = productRepository.findById(id).orElse(null);
+        assert product != null;
+        Hibernate.initialize(product.getFiles());
+        return product;
     }
 
     // метод загрузки товара со всеми зображениями
@@ -53,27 +70,43 @@ public class ProductService {
     // метод загрузки списка товаров только с главным изображением
     public Page<Product> findBySubcategoryWithMainImage(Subcategory subcategory, Integer offset) {
         Page<Product> products = productRepository.findBySubcategoryOrderByPrice(subcategory, PageRequest.of(offset - 1, pageSize));
-        return setMainImage(products);
+        setMainImage(products);
+        return products;
     }
 
     public Page<Product> findBySimpleFilterWithMainImage(String filter, Integer offset) {
         Page<Product> products = productRepository.findByProductNameContainsIgnoreCaseOrderByPrice(filter, PageRequest.of(offset - 1, pageSize));
-        return setMainImage(products);
+        setMainImage(products);
+        return products;
     }
 
-    private Page<Product> setMainImage(Page<Product> products) {
+    public List<Product> findTop10Popular() {
+        List<Product> products = productRepository.findTop10ByOrderByPurchasesNumberDesc();
+        setMainImage(products);
+        return products;
+    }
+
+    public List<Product> findTop10New() {
+        List<Product> products = productRepository.findTop10ByOrderByRegisterDateDesc();
+        setMainImage(products);
+        return products;
+    }
+
+    private void setMainImage(Iterable<Product> products) {
         for (Product product : products) {
             Image image = imageService.findMainImageByProduct(product);
 
-            //если нет изображения, то сделать пустым массив изображений
+            //если нет изображения, то указать на изображение "Нет изображения"
+            if (image == null) {
+                image = new Image();
+                image.setProduct(product);
+                image.setFileName("no image.jpeg");
+            }
+
             List<Image> files = new ArrayList<>();
-
-            if (image != null)
-                files.add(image);
-
+            files.add(image);
             product.setFiles(files);
-        }
-        return products;
+        };
     }
 
 
@@ -125,6 +158,8 @@ public class ProductService {
     public Product add(ProductDTO productDTO) {
         Product product = new Product();
         modelMapper.map(productDTO, product);
+        product.setPurchasesNumber(0);
+        product.setRegisterDate(new Date());
         return save(product);
     }
 

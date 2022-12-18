@@ -3,6 +3,7 @@ package home.ecommerce.contoller;
 import home.ecommerce.dto.UserDTO;
 import home.ecommerce.entity.User;
 import home.ecommerce.entity.VerificationToken;
+import home.ecommerce.service.BucketService;
 import home.ecommerce.service.UserService;
 import home.ecommerce.service.VerificationTokenService;
 import jakarta.validation.Valid;
@@ -28,6 +29,7 @@ import java.sql.Timestamp;
 public class AccountController {
     private static final Logger LOG = LoggerFactory.getLogger(AccountController.class);
     private final UserService userService;
+    private final BucketService bucketService;
     private final VerificationTokenService verificationTokenService;
 
     @InitBinder
@@ -87,6 +89,7 @@ public class AccountController {
                 } else {
                     user.setEnabled(true);
                     userService.save(user);
+                    bucketService.getBucket(user);
                     model.addAttribute("message", "Your account is successfully activated");
                 }
             } else {

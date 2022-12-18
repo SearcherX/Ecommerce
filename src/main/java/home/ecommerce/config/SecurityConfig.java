@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/", "/catalog/**", "/search/**", "/register", "/activation",
-                                "/webjars/**", "/css/**", "/img/**").permitAll()
+                                "/webjars/**", "/css/**", "/img/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin()

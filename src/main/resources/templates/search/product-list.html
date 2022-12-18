@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/layouts.html :: common_head(~{::title})}">
+<head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
     <title>Товары</title>
 </head>
 <body class="bg-color1">
@@ -10,8 +10,7 @@
     <div class="subcategory-products-container position-relative">
         <div th:each="product, varStat: ${productPage}" class="subcategory-product">
             <div class="img-container">
-                <img
-                        th:src="@{|/img/${product.files.size() > 0 ? product.files.get(0).fileName : 'no image.jpeg'}|}"
+                <img th:src="@{|/img/${product.files.size() > 0 ? product.files.get(0).fileName : 'no image.jpeg'}|}"
                         th:alt="${product.productName}">
             </div>
             <a th:href="@{|/catalog/product/${product.cipher}|}">

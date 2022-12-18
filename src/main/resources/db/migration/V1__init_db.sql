@@ -40,13 +40,15 @@ CREATE TABLE subcategory_t
 
 CREATE TABLE product_t
 (
-    id             bigserial NOT NULL,
-    cipher         varchar(255),
-    description    varchar(255),
-    present        boolean,
-    price          float(53),
-    product_name   varchar(255),
-    subcategory_id bigint,
+    id               bigserial NOT NULL,
+    cipher           varchar(255),
+    description      varchar(255),
+    present          boolean,
+    price            float(53),
+    purchases_number int,
+    register_date    timestamp(6),
+    product_name     varchar(255),
+    subcategory_id   bigint,
     PRIMARY KEY (id)
 );
 
