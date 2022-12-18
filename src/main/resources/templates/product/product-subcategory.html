@@ -19,7 +19,7 @@
         </nav>
         <h1>[[${subcategory.subcategoryName}]]</h1>
         <div class="subcategory-products-container position-relative">
-            <div th:each="product, varStat: ${productList}" class="subcategory-product">
+            <div th:each="product, varStat: ${productPage}" class="subcategory-product">
                 <div class="img-container">
                     <img
                          th:src="@{|/img/${product.files.size() > 0 ? product.files.get(0).fileName : 'no image.jpeg'}|}"

@@ -1,24 +1,23 @@
 package home.ecommerce.service;
 
 import home.ecommerce.dto.ProductDTO;
-import home.ecommerce.dto.SubcategoryDTO;
 import home.ecommerce.entity.Image;
 import home.ecommerce.entity.Product;
 import home.ecommerce.entity.Subcategory;
-import home.ecommerce.repository.ImageRepository;
 import home.ecommerce.repository.ProductRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.*;
 
 @Service
+@PropertySource("classpath:page.properties")
 public class ProductService {
     private final ProductRepository productRepository;
     private final ImageService imageService;
@@ -30,8 +29,13 @@ public class ProductService {
         this.modelMapper = modelMapper;
     }
 
-    @Value("${spring.data.web.pageable.default-page-size}")
+    @Value("${pageSize}")
     private Integer pageSize;
+
+    @Value("${leftDif}")
+    private int leftDif;
+    @Value("${rightDif}")
+    private int rightDif;
 
     public Product findById(Long id) {
         return productRepository.findById(id).orElse(null);
@@ -47,8 +51,17 @@ public class ProductService {
     }
 
     // метод загрузки списка товаров только с главным изображением
-    public List<Product> findBySubcategoryWithMainImage(Subcategory subcategory, Integer offset) {
-        List<Product> products = productRepository.findBySubcategoryOrderByPrice(subcategory, PageRequest.of(offset - 1, pageSize));
+    public Page<Product> findBySubcategoryWithMainImage(Subcategory subcategory, Integer offset) {
+        Page<Product> products = productRepository.findBySubcategoryOrderByPrice(subcategory, PageRequest.of(offset - 1, pageSize));
+        return setMainImage(products);
+    }
+
+    public Page<Product> findBySimpleFilterWithMainImage(String filter, Integer offset) {
+        Page<Product> products = productRepository.findByProductNameContainsIgnoreCaseOrderByPrice(filter, PageRequest.of(offset - 1, pageSize));
+        return setMainImage(products);
+    }
+
+    private Page<Product> setMainImage(Page<Product> products) {
         for (Product product : products) {
             Image image = imageService.findMainImageByProduct(product);
 
@@ -66,11 +79,8 @@ public class ProductService {
 
     // метод формирования списка страниц для пагинации
     // пример [1,..., x-2, x-1, x, x+1, x+2, ...,last], где x - текущая страница, last - последняя
-    public List<Integer> getPageNumbers(Subcategory subcategory, int currentPage) {
-        int productCount = (int) productRepository.countBySubcategory(subcategory);
-        int pageCount = productCount / pageSize + (productCount % pageSize == 0 ? 0 : 1);
-        int leftDif = 2;
-        int rightDif = 2;
+    public List<Integer> getPageNumbers(Page<Product> page, int currentPage) {
+        int pageCount = page.getTotalPages();
 
         if (pageCount <= 1)
             return new ArrayList<>(List.of(1));

@@ -3,6 +3,7 @@ package home.ecommerce.contoller;
 import home.ecommerce.entity.*;
 import home.ecommerce.service.*;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,8 +50,9 @@ public class CatalogController {
 
         model.addAttribute("category", category);
         model.addAttribute("subcategory", subcategory);
-        model.addAttribute("productList", productService.findBySubcategoryWithMainImage(subcategory, offset));
-        model.addAttribute("pageNumbers", productService.getPageNumbers(subcategory, offset));
+        Page<Product> productPage =  productService.findBySubcategoryWithMainImage(subcategory, offset);
+        model.addAttribute("productPage",productPage );
+        model.addAttribute("pageNumbers", productService.getPageNumbers(productPage, offset));
 
         if (principal != null) {
             User user = userService.findByUsername(principal.getName());

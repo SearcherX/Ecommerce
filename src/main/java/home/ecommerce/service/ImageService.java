@@ -8,6 +8,7 @@ import home.ecommerce.entity.Subcategory;
 import home.ecommerce.repository.ImageRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,8 +21,6 @@ import java.util.Optional;
 public class ImageService {
     private final ImageRepository imageRepository;
     private final StorageService storageService;
-    @Value("${spring.data.web.pageable.default-page-size}")
-    private Integer pageSize;
 
     public ImageService(ImageRepository imageRepository, StorageService storageService) {
         this.imageRepository = imageRepository;
@@ -46,11 +45,6 @@ public class ImageService {
 
     public Image save(Image image) {
         return imageRepository.save(image);
-    }
-
-    public List<Image> findBySubcategory(Subcategory subcategory, Integer offset) {
-        return imageRepository.findByFileNameContainingAndProduct_SubcategoryOrderByProduct_price("main",
-                subcategory, PageRequest.of(offset - 1, pageSize));
     }
 
     public void add(MultipartFile file, Product product) {
