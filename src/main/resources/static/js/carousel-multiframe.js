@@ -1,4 +1,4 @@
-let items = document.querySelectorAll('.carousel .carousel-item')
+let items = document.querySelectorAll('.carousel.multi-frame .carousel-item')
 
 console.log("скрипт загружен");
 items.forEach((el) => {

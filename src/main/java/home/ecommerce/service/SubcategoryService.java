@@ -7,6 +7,7 @@ import home.ecommerce.entity.Subcategory;
 import home.ecommerce.repository.SubcategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +17,13 @@ import java.util.*;
 @AllArgsConstructor
 public class SubcategoryService {
     private final SubcategoryRepository subcategoryRepository;
-    private final StorageService storageService;
     private final ModelMapper modelMapper;
 
+    @Transactional
     public List<Subcategory> listAllSubcategories() {
-        //return ((List<Subcategory>) subcategoryRepository.findAll()).stream()
-                //.sorted((Comparator.comparing(o -> o.getCategory().getCategoryName()))).toList();
-        return subcategoryRepository.findAllByOrderBySubcategoryNameAsc();
+        List<Subcategory> subcategories = subcategoryRepository.findAllByOrderBySubcategoryNameAsc();
+        subcategories.forEach(subcategory -> Hibernate.initialize(subcategory.getCategory()));
+        return subcategories;
     }
 
     @Transactional
@@ -47,7 +48,7 @@ public class SubcategoryService {
     }
 
     public Subcategory add(SubcategoryDTO subcategoryDTO) {
-        String fileName = storageService.uploadFile(subcategoryDTO.getFile());
+        String fileName = StorageService.uploadFile(subcategoryDTO.getFile());
         Subcategory subcategory = new Subcategory();
         modelMapper.map(subcategoryDTO, subcategory);
         subcategory.setFileName(fileName);
@@ -60,10 +61,10 @@ public class SubcategoryService {
         String newFileName;
 
         try {
-            newFileName = storageService.uploadFile(subcategoryDTO.getFile());
+            newFileName = StorageService.uploadFile(subcategoryDTO.getFile());
 
             if (!Objects.equals(oldFileName, newFileName))
-                storageService.deleteFile(oldFileName);
+                StorageService.deleteFile(oldFileName);
         } catch (RuntimeException ignore) {
             newFileName = oldFileName;
         }
@@ -84,10 +85,7 @@ public class SubcategoryService {
 
     public void deleteSubcategory(Long id) {
         Optional<Subcategory> deleted = subcategoryRepository.findById(id);
-        deleted.ifPresent(subcategory -> {
-            subcategoryRepository.delete(subcategory);
-            storageService.deleteFile(subcategory.getFileName());
-        });
+        deleted.ifPresent(subcategoryRepository::delete);
     }
 
     public long count() {

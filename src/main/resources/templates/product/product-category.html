@@ -15,7 +15,7 @@
         <h1>[[${category.categoryName}]]</h1>
         <div class="item-container">
             <div th:each="subcategory: ${subcategories}" class="item position-relative">
-                <div>
+                <div class="img-container">
                     <img th:src="@{|/img/${subcategory.fileName}|}" th:alt="${subcategory.subcategoryName}">
                 </div>
                 <a th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/1|}" class="stretched-link">[[${subcategory.subcategoryName}]]</a>

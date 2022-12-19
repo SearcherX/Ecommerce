@@ -27,16 +27,18 @@
     <div class="bg-white">
         <div class="row">
             <div class="col-6 mr-4">
-                <div th:if="${product.files.size() <= 1}" class="p-5">
+                <div th:if="${product.files.size() <= 1}" class="img-container h-100 p-5">
                     <img th:src="@{|/img/${product.files.size() == 0 ? 'no image.jpeg' : product.files.get(0).fileName}|}"
-                         class="d-block w-100"
-                         th:alt="${product.productName}">
+                         th:alt="${product.productName}" class="img-details">
                 </div>
 
-                <div th:if="${product.files.size() > 1}" id="carouselExampleIndicators" class="carousel carousel-dark slide h-100" data-bs-ride="true">
+                <div th:with="mainImage=${T(home.ecommerce.service.ImageService).getMainImageName(product.files)}"
+                     th:if="${product.files.size() > 1}" id="carouselExampleIndicators"
+                     class="carousel carousel-dark slide h-100" data-bs-ride="true">
                     <div class="carousel-indicators">
                         <div th:each="image, stat: ${product.files}"
-                             th:with="condition=${image.fileName.contains('main') || (!image.fileName.contains('main') && stat.last)}" th:remove="tag">
+                             th:with="condition=${image.fileName == mainImage}"
+                             th:remove="tag">
                             <button th:if="${condition}" type="button" data-bs-target="#carouselExampleIndicators"
                                     class="active" aria-current="true" th:data-bs-slide-to="${stat.index}"
                                     th:aria-label="|Slide ${stat.index + 1}|">
@@ -47,21 +49,21 @@
                         </div>
                     </div>
                     <div class="carousel-inner h-100">
-                        <div th:class="|carousel-item ${image.fileName.contains('main') ? 'active' : (stat.last ? 'active' : '')}|"
+                        <div th:class="|carousel-item ${image.fileName == mainImage ? 'active' : ''}|"
                              th:each="image, stat: ${product.files}">
-                            <img th:src="@{|/img/${image.fileName}|}" class="img-fluid"
-                                 th:alt="${product.productName}">
+                            <div class="img-container h-100">
+                                <img th:src="@{|/img/${image.fileName}|}" th:alt="${product.productName}"
+                                     class="img-details">
+                            </div>
                         </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
                             data-bs-slide="prev">
-<!--                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
                         <i class="fa-solid fa-chevron-left"></i>
                         <span class="visually-hidden">Previous</span>
                     </button>
                     <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
                             data-bs-slide="next">
-<!--                        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
                         <i class="fa-solid fa-chevron-right"></i>
                         <span class="visually-hidden">Next</span>
                     </button>
@@ -88,7 +90,7 @@
                             <button th:if="${condition}" class="btn-buy stat-link btn-cart">
                                 В корзине
                             </button>
-                            <button th:unless="${condition}" class="btn-buy stat-link w-100 justify-content-center">
+                            <button th:unless="${condition}" class="btn-buy stat-link w-100 justify-content-center" th:data-id="${product.id}">
                                 Купить
                             </button>
                         </div>
@@ -99,28 +101,9 @@
     </div>
 </div>
 
+<footer th:replace="~{layout/layouts.html :: footer}"></footer>
+
 <script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+<script th:src="@{/js/buy.js}"></script>
 </body>
 </html>
-
-<script th:inline="javascript">
-    document.querySelectorAll(".btn-buy").forEach(btn => btn.addEventListener("click", async (e) => {
-        if (e.target.className.includes("btn-cart")) {
-            location.replace("/bucket")
-        } else {
-            const product = [[${product}]];
-            const url = "/bucket/add?productId=" + product.id;
-
-            const response = await fetch(url, {
-                method: "POST",
-            });
-
-            if (response.url.includes("/login")) {
-                location.replace(response.url);
-            } else {
-                e.target.textContent = "В корзине";
-                e.target.classList.add("btn-cart");
-            }
-        }
-    }))
-</script>

@@ -11,5 +11,5 @@ import java.util.List;
 
 public interface ImageRepository extends CrudRepository<Image, Long>, PagingAndSortingRepository<Image, Long> {
     List<Image> findByFileNameContainingAndProduct_SubcategoryOrderByProduct_price(String fileName, Subcategory subcategory, Pageable pageable);
-    Image findByProductAndFileNameContains(Product product, String str);
+    List<Image> findByProductAndFileNameContains(Product product, String str);
 }

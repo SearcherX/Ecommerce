@@ -38,12 +38,15 @@
             </div>
 
         </div>
-        <div class="col bg-color1" layout:fragment="content">
+        <div class="col" layout:fragment="content">
             Контент
         </div>
     </div>
 </div>
 
+<footer th:replace="~{layout/layouts.html :: footer}"></footer>
+
 <script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+<script th:src="@{/js/buy.js}"></script>
 </body>
 </html>

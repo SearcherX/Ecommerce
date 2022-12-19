@@ -1,5 +1,6 @@
 package home.ecommerce.entity;
 
+import home.ecommerce.service.StorageService;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,7 +18,12 @@ public class Category {
     private String categoryName;
     private String cipher;
     private String fileName;
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OrderBy("subcategoryName asc")
     private Set<Subcategory> subcategories;
+
+    @PreRemove
+    public void deleteImage() {
+        StorageService.deleteFile(fileName);
+    }
 }

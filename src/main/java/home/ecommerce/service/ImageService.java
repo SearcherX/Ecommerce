@@ -18,29 +18,16 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
-    private final StorageService storageService;
-
-    public ImageService(ImageRepository imageRepository, StorageService storageService) {
-        this.imageRepository = imageRepository;
-        this.storageService = storageService;
-    }
 
     public Image findById(Long id) {
         return imageRepository.findById(id).orElse(null);
     }
 
-    public Image findMainImageByProduct(Product product) {
+    public List<Image> findMainImageByProduct(Product product) {
         return imageRepository.findByProductAndFileNameContains(product, "main");
-    }
-
-    public Image findMainImageFromList(List<Image> images) {
-        for (Image image: images) {
-            if (image.getFileName().contains("main"))
-                return image;
-        }
-        return null;
     }
 
     public Image save(Image image) {
@@ -51,7 +38,7 @@ public class ImageService {
         if (Objects.equals(file.getOriginalFilename(), ""))
             return;
 
-        String newFileName = storageService.uploadFile(file);
+        String newFileName = StorageService.uploadFile(file);
         Image image = new Image();
         image.setFileName(newFileName);
         image.setProduct(product);
@@ -62,7 +49,7 @@ public class ImageService {
         if (Objects.equals(file.getOriginalFilename(), ""))
             return;
 
-        String newFileName = storageService.uploadFile(file);
+        String newFileName = StorageService.uploadFile(file);
         Image image = new Image();
         image.setFileName(newFileName);
         image.setProduct(product);
@@ -72,9 +59,18 @@ public class ImageService {
 
     public void delete(Long id) {
         Optional<Image> deleted = imageRepository.findById(id);
-        deleted.ifPresent(image -> {
-            imageRepository.delete(image);
-            storageService.deleteFile(image.getFileName());
-        });
+        deleted.ifPresent(imageRepository::delete);
+    }
+
+    public static String getMainImageName(List<Image> images) {
+        if (images == null || images.size() == 0 )
+            return "no image.jpeg";
+
+        for (Image image : images) {
+            if (image.getFileName().contains("main"))
+                return image.getFileName();
+        }
+
+        return images.get(0).getFileName();
     }
 }

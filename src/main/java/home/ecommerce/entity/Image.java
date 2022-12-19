@@ -1,6 +1,7 @@
 package home.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import home.ecommerce.service.StorageService;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,4 +21,9 @@ public class Image {
     @JoinColumn(name = "product_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
+
+    @PreRemove
+    public void deleteImage() {
+        StorageService.deleteFile(fileName);
+    }
 }

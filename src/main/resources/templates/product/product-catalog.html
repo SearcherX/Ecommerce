@@ -14,7 +14,7 @@
         <h1>Каталог товаров</h1>
         <div class="item-container">
             <div th:each="category: ${categoriesList}" class="item position-relative">
-                <div>
+                <div class="img-container">
                     <img th:src="@{|/img/${category.fileName}|}" th:alt="${category.categoryName}">
                 </div>
                 <a th:href="@{|/catalog/${category.cipher}|}" class="stretched-link">[[${category.categoryName}]]</a>

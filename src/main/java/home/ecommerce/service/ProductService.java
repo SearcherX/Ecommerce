@@ -46,7 +46,7 @@ public class ProductService {
     public Page<Product> findSortedAllWithSubcategory(Integer offset, Integer pageSize) {
         Page<Product> products = productRepository.findByOrderByPrice(PageRequest.of(offset - 1, pageSize));
         products.forEach(product -> Hibernate.initialize(product.getSubcategory()));
-        setMainImage(products);
+//        setMainImage(products);
         return products;
     }
 
@@ -94,17 +94,19 @@ public class ProductService {
 
     private void setMainImage(Iterable<Product> products) {
         for (Product product : products) {
-            Image image = imageService.findMainImageByProduct(product);
+            List<Image> images = imageService.findMainImageByProduct(product);
+            Image mainImage;
 
             //если нет изображения, то указать на изображение "Нет изображения"
-            if (image == null) {
-                image = new Image();
-                image.setProduct(product);
-                image.setFileName("no image.jpeg");
-            }
+            if (images.size() == 0) {
+                mainImage = new Image();
+                mainImage.setProduct(product);
+                mainImage.setFileName("no image.jpeg");
+            } else
+                mainImage = images.get(0);
 
             List<Image> files = new ArrayList<>();
-            files.add(image);
+            files.add(mainImage);
             product.setFiles(files);
         };
     }
@@ -160,7 +162,7 @@ public class ProductService {
         modelMapper.map(productDTO, product);
         product.setPurchasesNumber(0);
         product.setRegisterDate(new Date());
-        return save(product);
+       return save(product);
     }
 
     public Product update(ProductDTO productDTO, Long id) {

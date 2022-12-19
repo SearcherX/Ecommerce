@@ -20,7 +20,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final StorageService storageService;
     private final ModelMapper modelMapper;
 
     @Transactional
@@ -52,7 +51,7 @@ public class CategoryService {
     }
 
     public Category add(CategoryDTO categoryDTO) {
-        String fileName = storageService.uploadFile(categoryDTO.getFile());
+        String fileName = StorageService.uploadFile(categoryDTO.getFile());
         Category category = new Category();
         modelMapper.map(categoryDTO, category);
         category.setFileName(fileName);
@@ -65,10 +64,10 @@ public class CategoryService {
         String newFileName;
 
         try {
-            newFileName = storageService.uploadFile(categoryDTO.getFile());
+            newFileName = StorageService.uploadFile(categoryDTO.getFile());
 
             if (!Objects.equals(oldFileName, newFileName))
-                storageService.deleteFile(oldFileName);
+                StorageService.deleteFile(oldFileName);
         } catch (RuntimeException ignore) {
             newFileName = oldFileName;
         }
@@ -89,10 +88,7 @@ public class CategoryService {
 
     public void deleteCategory(Long id) {
         Optional<Category> deleted = categoryRepository.findById(id);
-        deleted.ifPresent(category -> {
-            categoryRepository.deleteImages(category);
-            categoryRepository.delete(category);
-        });
+        deleted.ifPresent(categoryRepository::delete);
     }
 
     public long count() {

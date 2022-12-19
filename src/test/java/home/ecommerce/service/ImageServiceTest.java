@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -20,7 +22,7 @@ private ProductService productService;
     @Test
     void findByProduct() {
         Product product = productService.findById(1L);
-        Image mainImage = imageService.findMainImageByProduct(product);
-        System.out.println(mainImage);
+        List<Image> mainImages = imageService.findMainImageByProduct(product);
+        System.out.println(mainImages);
     }
 }

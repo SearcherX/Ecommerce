@@ -35,7 +35,7 @@
                         <button th:if="${condition}" class="btn-buy stat-link btn-cart">
                             В корзине
                         </button>
-                        <button th:unless="${condition}" class="btn-buy stat-link" th:data-index="${varStat.index}">
+                        <button th:unless="${condition}" class="btn-buy stat-link" th:data-id="${product.id}">
                             Купить
                         </button>
                     </div>
@@ -84,25 +84,3 @@
 </body>
 </html>
 
-<script th:inline="javascript">
-    document.querySelectorAll(".btn-buy").forEach(btn => btn.addEventListener("click", async (e) => {
-        if (e.target.className.includes("btn-cart")) {
-            location.replace("/bucket")
-        } else {
-            const productList = [[${productList}]];
-            const index = +e.target.dataset.index;
-            const url = "/bucket/add?productId=" + productList[index]["id"];
-
-            const response = await fetch(url, {
-                method: "POST",
-            });
-
-            if (response.url.includes("/login")) {
-                location.replace(response.url);
-            } else {
-                e.target.textContent = "В корзине";
-                e.target.classList.add("btn-cart");
-            }
-        }
-    }))
-</script>
