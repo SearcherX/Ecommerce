@@ -6,9 +6,18 @@
 <body class="vh-100 d-flex flex-column">
 <header th:replace="~{layout/layouts.html :: menu}"></header>
 
+<template id="template-select">
+    <div class="d-flex flex-column justify-content-start align-items-start mt-2">
+        <label class="form-label text-start p-0 me-1 mb-0">Выбрать область поиска</label>
+            <div class="p-0">
+                <select class="form-select"></select>
+            </div>
+    </div>
+</template>
+
 <div class="container flex-fill">
     <div class="row h-100">
-        <div class="col-3 h-100 pt-3 br-color1 d-lg-block d-none">
+        <div class="h-100 pt-3 d-lg-block d-none bg-white left-menu-width">
             <h2 class="text-center">Каталог</h2>
 
             <div class="accordion" id="accordionCategories">
@@ -26,7 +35,8 @@
                         <div class="accordion-body">
                             <ul class="nav flex-column">
                                 <li class="nav-item" th:each="subcategory : ${category.subcategories}">
-                                    <a class="nav-link" th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/1|}">
+                                    <a class="nav-link"
+                                       th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/1|}">
                                         [[${subcategory.subcategoryName}]]
                                     </a>
                                 </li>
@@ -37,8 +47,68 @@
 
             </div>
 
+            <div class="container my-4 fs-6 p-0">
+                <h2 class="mb-2 text-center">Фильтр</h2>
+                <form th:action="@{/catalog/search}" method="post" th:object="${filter}" class="form-border">
+                    <div class="d-flex flex-column justify-content-center align-items-start" id="direction-container">
+                        <label for="selectDestination" class="form-label text-start p-0 me-1 mb-0">Область
+                            поиска: </label>
+                        <div class="p-0">
+                            <select id="selectDestination" class="form-select" th:field="*{destination}">
+                                <option value="all">Весь сайт</option>
+                                <option value="categoryName">Категория</option>
+                                <option value="subcategoryName">Подкатегория</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-12 pb-1 mb-2">
+                        <label for="inputProductName" class="form-label">Название содержит:</label>
+                        <input type="text" class="form-control" id="inputProductName"
+                               th:field="*{nameContains}">
+                    </div>
+                    <div class="col-12 mb-2">
+                        <div class="row m-0">
+                            <label class="form-label p-0 mb-0">Цена:</label>
+                        </div>
+                        <div class="d-flex justify-content-start align-items-center m-0 inputPrice">
+                            <label for="inputMinPrice" class="form-label text-left p-0 mb-0">от</label>
+                            <div class="p-0 mx-2">
+                                <input type="number" min="0" value="0" class="form-control" id="inputMinPrice"
+                                       th:field="*{minPrice}">
+                            </div>
+                            <label for="inputMaxPrice" class="form-label text-center p-0 mb-0">до</label>
+                            <div class="p-0 mx-2">
+                                <input type="number" class="form-control" id="inputMaxPrice"
+                                       th:field="*{maxPrice}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 py-1 mb-2">
+                        <label for="inputSort" class="form-label fs-6 text-end col p-0 mb-0">Сортировать по:</label>
+                        <div class="d-flex justify-content-start">
+                            <div class="me-2">
+                                <select id="inputSort" class="form-select" th:field="*{sortBy}">
+                                    <option value="productName">Названию</option>
+                                    <option value="price">Цене</option>
+                                </select>
+                            </div>
+                            <div>
+                                <select id="inputDirection" class="form-select" th:field="*{asc}">
+                                    <option th:value="true">Возростанию</option>
+                                    <option th:value="false">Убыванию</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 py-1">
+                        <button type="submit" class="stat-link stat-link-active">Поиск</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
-        <div class="col" layout:fragment="content">
+        <div class="col p-4" layout:fragment="content">
             Контент
         </div>
     </div>
@@ -48,5 +118,17 @@
 
 <script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
 <script th:src="@{/js/buy.js}"></script>
+<script th:src="@{/js/add-select-fields.js}"></script>
+<script th:inline="javascript">
+    const categories = [[${categoriesList}]];
+    const selectedCategory = [[${filter.categoryName}]];
+    const selectedSubcategory = [[${filter.subcategoryName}]]
+
+    document.querySelector("#selectDestination").addEventListener("change",
+        (evt) => destinationHandler(evt, categories, selectedCategory, selectedSubcategory));
+    document.addEventListener("DOMContentLoaded",
+        (evt) => destinationHandler(evt, categories, selectedCategory, selectedSubcategory));
+</script>
+
 </body>
 </html>

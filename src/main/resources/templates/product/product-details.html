@@ -87,7 +87,7 @@
                             [[${#numbers.formatDecimal(product.price, 3, 'WHITESPACE', 2, 'POINT')}]] ₽
                         </div>
                         <div class="col-4 d-flex align-items-center details-buy-container">
-                            <button th:if="${condition}" class="btn-buy stat-link btn-cart">
+                            <button th:if="${condition}" class="btn-buy stat-link stat-link-active">
                                 В корзине
                             </button>
                             <button th:unless="${condition}" class="btn-buy stat-link w-100 justify-content-center" th:data-id="${product.id}">

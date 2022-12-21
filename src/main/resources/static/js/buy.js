@@ -1,5 +1,5 @@
 document.querySelectorAll(".btn-buy").forEach(btn => btn.addEventListener("click", async (e) => {
-    if (e.target.className.includes("btn-cart")) {
+    if (e.target.className.includes("stat-link-active")) {
         location.replace("/bucket")
     } else {
         const productId = +e.target.dataset.id;
@@ -13,7 +13,7 @@ document.querySelectorAll(".btn-buy").forEach(btn => btn.addEventListener("click
             location.replace(response.url);
         } else {
             e.target.textContent = "В корзине";
-            e.target.classList.add("btn-cart");
+            e.target.classList.add("stat-link-active");
         }
     }
 }))

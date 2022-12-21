@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
-  <title th:text="${action == 'create' ? 'Добавить категорию' : 'Редактировать категорию'}"></title>
+  <title th:text="${action == 'create' ? 'Добавить подкатегорию' : 'Редактировать подкатегорию'}"></title>
 </head>
 <body class="bg-color1">
 <header th:replace="~{layout/layouts.html :: menu}"></header>
@@ -11,7 +11,7 @@
       <form method="post" th:action="@{/admin/subcategories/save}" th:object="${subcategoryDTO}"
             enctype="multipart/form-data">
         <h3 class="display-4 text-center"
-            th:text="${action == 'create' ? 'Добавить категорию' : 'Редактировать категорию'}"></h3>
+            th:text="${action == 'create' ? 'Добавить подкатегорию' : 'Редактировать подкатегорию'}"></h3>
 
         <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
 
@@ -30,7 +30,7 @@
           <input type="file" name="file" class="form-control" id="inputFile" th:value="${file}">
         </div>
         <div class="col-12">
-          <label for="inputCategory" class="form-label">Group:</label>
+          <label for="inputCategory" class="form-label">Категория:</label>
           <select id="inputCategory" class="form-select" th:field="*{category}">
             <th:block th:each="choseCategory: ${categoriesList}">
               <option th:value="${choseCategory.id}">

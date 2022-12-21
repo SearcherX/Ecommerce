@@ -48,4 +48,10 @@ class ProductServiceTest {
         List<Product> top10 = productService.findTop10Popular();
         System.out.println(top10);
     }
+
+    @Test
+    void findTest() {
+        Page<Product> products = productService.findTest("Ноутбуки", 1);
+        System.out.println(products);
+    }
 }

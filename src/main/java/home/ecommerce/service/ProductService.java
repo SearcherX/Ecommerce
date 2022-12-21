@@ -1,5 +1,9 @@
 package home.ecommerce.service;
 
+import home.ecommerce.contoller.filter.ProductSpecification;
+import home.ecommerce.contoller.filter.ProductSpecificationBuilder;
+import home.ecommerce.contoller.filter.SearchCriteria;
+import home.ecommerce.dto.FilterDTO;
 import home.ecommerce.dto.ProductDTO;
 import home.ecommerce.entity.Image;
 import home.ecommerce.entity.Product;
@@ -11,6 +15,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.PageRequest;
 
@@ -47,6 +54,33 @@ public class ProductService {
         Page<Product> products = productRepository.findByOrderByPrice(PageRequest.of(offset - 1, pageSize));
         products.forEach(product -> Hibernate.initialize(product.getSubcategory()));
 //        setMainImage(products);
+        return products;
+    }
+
+    public Page<Product> findTest(String categoryName, Integer offset) {
+        //return productRepository.findAll(ProductSpecification.inSubcategory(categoryName), PageRequest.of(offset - 1, pageSize));
+        return null;
+    }
+
+    private Pageable getPageRequest(Integer offset, Integer pageSize, String sortBy, boolean isAscending) {
+        if (!isAscending)
+            return PageRequest.of(offset, pageSize, Sort.by(sortBy).descending());
+
+        return PageRequest.of(offset, pageSize, Sort.by(sortBy));
+    }
+
+    @Transactional
+    public Page<Product> findBySearchCriteria(FilterDTO filterDTO, Integer offset) {
+        ProductSpecificationBuilder builder = new ProductSpecificationBuilder();
+        List<SearchCriteria> criteriaList = filterDTO.toCriteriaList();
+
+        if (criteriaList != null) {
+            criteriaList.forEach(builder::with);
+        }
+
+        Page<Product> products = productRepository.findAll(builder.build(),
+                getPageRequest(offset - 1, pageSize, filterDTO.getSortBy(), filterDTO.isAsc()));
+        setMainImage(products);
         return products;
     }
 
@@ -108,7 +142,8 @@ public class ProductService {
             List<Image> files = new ArrayList<>();
             files.add(mainImage);
             product.setFiles(files);
-        };
+        }
+        ;
     }
 
 
@@ -162,7 +197,7 @@ public class ProductService {
         modelMapper.map(productDTO, product);
         product.setPurchasesNumber(0);
         product.setRegisterDate(new Date());
-       return save(product);
+        return save(product);
     }
 
     public Product update(ProductDTO productDTO, Long id) {

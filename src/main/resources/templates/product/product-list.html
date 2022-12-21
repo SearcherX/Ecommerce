@@ -1,10 +1,107 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
-    <title>Products</title>
-</head>
+<html lang="en" layout:decorate="~{layout/product-layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <body>
-  <h1 sec:authorize="hasRole('CUSTOMER')">Hello, customer</h1>
-  <h1 sec:authorize="hasRole('ADMIN')">Hello, admin</h1>
+<div layout:fragment="content">
+    <div class="container" th:with="search=${filter.search}">
+        <nav th:unless="${search}" aria-label="breadcrumb" class="mt-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Главная</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/catalog}">Каталог товаров</a></li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{'/catalog/' + ${category.cipher}}">
+                        [[${category.categoryName}]]
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">[[${subcategory.subcategoryName}]]</li>
+            </ol>
+        </nav>
+        <h2 th:unless="${search}" class="mb-3">[[${subcategory.subcategoryName}]]</h2>
+        <h2 th:if="${search}" class="mb-3">Найдено: [[${productPage.getTotalElements()}]] товаров</h2>
+        <div class="subcategory-products-container position-relative">
+            <div th:each="product, varStat: ${productPage}" class="subcategory-product">
+                <div class="img-container">
+                    <img
+                            th:src="@{|/img/${product.files.size() > 0 ? product.files.get(0).fileName : 'no image.jpeg'}|}"
+                            th:alt="${product.productName}">
+                </div>
+                <a th:href="@{|/catalog/product/${product.cipher}|}">
+                    [[${product.productName}]]</a>
+                <div class="product-buy">
+                    <span>[[${#numbers.formatDecimal(product.price, 3, 'WHITESPACE', 2, 'POINT')}]] ₽</span>
+
+                    <div th:with="condition=${T(home.ecommerce.service.BucketService).containsProduct(bucketItems, product)}"
+                         th:remove="tag">
+                        <button th:if="${condition}" class="btn-buy stat-link stat-link-active">
+                            В корзине
+                        </button>
+                        <button th:unless="${condition}" class="btn-buy stat-link" th:data-id="${product.id}">
+                            Купить
+                        </button>
+                    </div>
+                </div>
+                <div class="product-stat">
+                    <a th:href="@{#}" class="stat-link">Звезды</a>
+                    <a th:href="@{#}" class="stat-link">Отзывы</a>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4" th:if="${#lists.size(pageNumbers) > 1}">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li th:class="|page-item ${page <= pageNumbers[0] ? 'disabled': ''}|">
+                        <a class="page-link" th:unless="${search}"
+                           th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/${page - 1}|}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${search}"
+                           th:href="@{|/catalog/search?page=${page - 1}|}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <div th:each="pageNumber, stat: ${pageNumbers}" th:remove="tag">
+                        <!--                        добавить ... перед последней страницей-->
+                        <li class="page-item disabled"
+                            th:if="${stat.last && pageNumbers[__${#lists.size(pageNumbers) - 2}__] + 1 != pageNumbers[__${#lists.size(pageNumbers) - 1}__]}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                        <li th:class="|page-item ${pageNumber == page ? 'pagination-widget__page_active' : ''}|"
+                            th:aria-current="${pageNumber == page ? 'page' : ''}">
+                            <a class="page-link" th:if="${search}"
+                               th:href="@{|/catalog/search?page=${pageNumber}|}">
+                                [[${pageNumber}]]
+                            </a>
+                            <a class="page-link" th:unless="${search}"
+                               th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/${pageNumber}|}">
+                                [[${pageNumber}]]
+                            </a>
+                        </li>
+                        <!--                        добавить ... после первой страницы-->
+                        <li class="page-item disabled"
+                            th:if="${stat.first && pageNumbers[0] + 1 != pageNumbers[1]}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </div>
+                    <li th:class="|page-item ${page >= pageNumbers[__${#lists.size(pageNumbers) - 1}__] ? 'disabled': ''}|">
+                        <a class="page-link" th:unless="${search}"
+                           th:href="@{|/catalog/${category.cipher}/${subcategory.cipher}/${page + 1}|}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                        <a class="page-link" th:if="${search}"
+                           th:href="@{|/catalog/search?page=${page + 1}|}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+

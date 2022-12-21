@@ -28,11 +28,10 @@
                     </ul>
                 </div>
                 <div class="order-sm-4 w-100 d-none d-sm-block"></div>
-                <form th:action="@{/search/}" method="get" class="col-md col-sm-12 order-lg-0 order-last d-flex">
+                <form th:action="@{/catalog/search?page=1}" method="post" class="col-md col-sm-12 order-lg-0 order-last d-flex">
                     <div class="search-container d-flex w-100">
                         <label for="search"><i class="fa-solid fa-search search-icon"></i></label>
-                        <input type="search" placeholder="Поиск по сайту" class="w-100" id="search" name="str">
-                        <input type="hidden" name="offset" value="1">
+                        <input type="search" placeholder="Поиск по сайту" class="w-100" id="search" name="pn">
                     </div>
                 </form>
                 <div class="right-menu">
