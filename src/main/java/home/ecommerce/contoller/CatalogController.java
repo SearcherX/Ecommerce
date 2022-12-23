@@ -62,6 +62,7 @@ public class CatalogController {
         Page<Product> products = productService.findBySearchCriteria(filter, page);
         model.addAttribute("page", page);
         model.addAttribute("productPage", products);
+        model.addAttribute("found", CommonUtils.getTotalItemsString(products.getTotalElements()));
         model.addAttribute("pageNumbers", productService.getPageNumbers(products, page));
 
         if (principal != null) {

@@ -18,7 +18,7 @@
             </ol>
         </nav>
         <h2 th:unless="${search}" class="mb-3">[[${subcategory.subcategoryName}]]</h2>
-        <h2 th:if="${search}" class="mb-3">Найдено: [[${productPage.getTotalElements()}]] товаров</h2>
+        <h2 th:if="${search}" class="mb-3">Найдено: [[${found}]]</h2>
         <div class="subcategory-products-container position-relative">
             <div th:each="product, varStat: ${productPage}" class="subcategory-product">
                 <div class="img-container">
