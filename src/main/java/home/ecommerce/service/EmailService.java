@@ -30,7 +30,7 @@ public class EmailService {
         if (verificationToken != null) {
             String token = verificationToken.getToken();
             Context context = new Context();
-            context.setVariable("title", "Verify your email address");
+            context.setVariable("title", "Подтвердите адрес вашей почты");
             context.setVariable("link", "http://localhost:8080/activation?token=" + token);
 
             String body = templateEngine.process("account/verification", context);
@@ -39,7 +39,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
             helper.setTo(user.getEmail());
-            helper.setSubject("email address verification");
+            helper.setSubject("Подтверждение адреса почты");
             helper.setText(body, true);
 
             javaMailSender.send(message);

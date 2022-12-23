@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ import java.util.Set;
 public class BucketService {
     private final BucketRepository bucketRepository;
     private final BucketItemRepository itemRepository;
+    private final ProductService productService;
 
     public Bucket findByUser(User user) {
         return bucketRepository.findByUser(user);
@@ -98,6 +100,22 @@ public class BucketService {
         bucket.setTotalItems(totalItems);
         bucket.setTotalPrices(totalPrice);
 
+        bucketRepository.save(bucket);
+    }
+
+    public void increasePurchaseNumber(User user) {
+        Bucket bucket = user.getBucket();
+        Set<BucketItem> items = bucket.getBucketItems();
+        List<Product> products = items.stream()
+                .map(BucketItem::getProduct)
+                .toList();
+        products.forEach(product -> product.setPurchasesNumber(product.getPurchasesNumber() + 1));
+        productService.saveAll(products);
+    }
+
+    public void deleteALl(User user) {
+        Bucket bucket = user.getBucket();
+        bucket.getBucketItems().clear();
         bucketRepository.save(bucket);
     }
 

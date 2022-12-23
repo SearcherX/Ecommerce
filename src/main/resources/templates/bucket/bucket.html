@@ -3,82 +3,109 @@
 <head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
     <title>Корзина</title>
 </head>
-<body>
+<body class="min-vh-100 d-flex flex-column">
 <header th:replace="~{layout/layouts.html :: menu}"></header>
-<div class="container text-center">
-    <h2>Корзина</h2>
+<div class="container p-4 flex-fill">
+    <div class="row ps-0">
+        <div class="col ps-0">
+            <h2 class="mt-4">Корзина</h2>
+        </div>
+    </div>
 
-    <table class="table table-bordered bg-light">
-        <thead class="table-dark">
-        <tr>
-            <th>Номер</th>
-            <th>Название</th>
-            <th>Цена</th>
-            <th>Количество</th>
-            <th>Удалить</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="bucketItem, stat: ${bucket.getBucketItems()}">
-            <tr>
-                <td>[[${stat.index + 1}]]</td>
-                <td>[[${bucketItem.product.productName}]]</td>
-                <td th:id="|price-cel-${stat.index}|">[[${#numbers.formatDecimal(bucketItem.totalPrice, 3,
-                    'WHITESPACE', 2, 'POINT')}]]  ₽
-                </td>
-                <td>
-                    <div class="number-input">
-                        <button th:onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                                th:data-index="${stat.index}"></button>
-                        <input class="quantity" min="1" name="quantity" th:value="${bucketItem.quantity}" type="number"
-                               th:id="|count-${stat.index}|" th:data-index="${stat.index}">
-                        <button th:onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                                class="plus" th:data-index="${stat.index}"></button>
+    <div th:if="${bucket.bucketItems.size() == 0}" class="row mt-2 bg-white bucket-item p-4">
+        <div class="col">
+            <div class="empty-bucket"></div>
+            <div class="row justify-content-center">
+                <div class="col-4">
+                    <h3 class="text-center fw-bold">Корзина пуста</h3>
+                    <div class="text-center">
+                        <a th:href="@{/}" class="stat-link">На главную</a>
+                        <a th:href="@{/catalog}" class="stat-link stat-link-active">В каталог</a>
                     </div>
-                </td>
-                <td>
-                    <a th:href="@{|/bucket/delete/${bucketItem.id}|}" class="dropdown-item">
-                        Удалить
-                    </a>
-                </td>
-            </tr>
-        </th:block>
-        </tbody>
-    </table>
-    <h3 class="total">
-        Количество товаров: [[${bucket.totalItems}]], Общая цена:
-        [[${#numbers.formatDecimal(bucket.totalPrices, 3, 'WHITESPACE', 2, 'POINT')}]] ₽
-    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${bucket.bucketItems.size() > 0}" class="row gx-5 mt-2">
+        <div class="col-8">
+            <div class="row bg-white common-border">
+                <div class="d-flex justify-content-end align-items-center">
+                    <a th:href="@{/bucket/delete}" class="stat-link stat-link-active">Удалить всё</a>
+                </div>
+            </div>
+            <div class="row bg-white common-border mt-2">
+                <div class="col">
+                    <div th:each="bucketItem, stat: ${bucket.bucketItems}" th:class="|row ${stat.first ? '' : 'mt-2'}|">
+                        <div class="bucket-item-img-container position-relative">
+                            <img th:src="@{|/img/${bucketItem.product.files.size() > 0 ? bucketItem.product.files.get(0).fileName : 'no image.jpeg'}|}"
+                                 th:alt="${bucketItem.product.productName}">
+                            <a th:href="@{|/catalog/product/${bucketItem.product.cipher}|}" class="stretched-link"></a>
+                        </div>
+                        <div class="col-6">
+                            [[${bucketItem.product.productName}]]
+                        </div>
+                        <div class="col-2">
+                            <div class="number-input">
+                                <button th:onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
+                                        th:data-index="${stat.index}"></button>
+                                <input class="quantity" min="1" name="quantity" th:value="${bucketItem.quantity}"
+                                       type="number"
+                                       th:id="|count-${stat.index}|" th:data-index="${stat.index}">
+                                <button th:onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                        class="plus" th:data-index="${stat.index}"></button>
+                            </div>
+                        </div>
+                        <div class="col text-center">
+                            <div class="text-center fs-6 fw-bold" th:id="|price-cel-${stat.index}|">
+                                [[${#numbers.formatDecimal(bucketItem.totalPrice, 3, 'WHITESPACE', 2, 'POINT')}]] ₽
+                            </div>
+                            <a th:href="@{|/bucket/delete/${bucketItem.id}|}" class="stat-link mt-2">
+                                Удалить
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="bg-white common-border px-4">
+                <div class="row">
+                    <div class="col p-3">
+                        Условия заказа
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <div>Итого:</div>
+                        <div class="totalItems">[[${bucket.totalItems}]] товара</div>
+                    </div>
+                    <div class="col text-end totalPrice">
+                        [[${#numbers.formatDecimal(bucket.totalPrices, 3, 'WHITESPACE', 2, 'POINT')}]] ₽
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <a th:href="@{/bucket/checkout}"
+                           class="stat-link stat-link-active w-100 justify-content-center my-4 p-4 fw-bold">Перейти к формлению</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<footer th:replace="~{layout/layouts.html :: footer}"></footer>
+
 <script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
+<script th:src="@{/js/change-product-quantity.js}"></script>
 <script th:inline="javascript">
-    const formatter = new Intl.NumberFormat('ru-RU', {
-        style: 'currency',
-        currency: 'RUB',
-    });
-
-
-    async function changeQuantity(e) {
-        const elemIndex = +e.target.dataset.index;
-        const counter = document.querySelector(`input[type=number]#count-${elemIndex}`);
-        const quantity = counter.value;
-        const bucketItemsList = [[${bucket.getBucketItems()}]];
-        const url = `/bucket/update?itemId=${bucketItemsList[elemIndex].id}&quantity=${quantity}`;
-
-        const response = await fetch(url, {
-            method: "POST",
-        });
-        const responseJson = await response.json();
-
-        document.querySelector(".total").textContent = `Количество товаров: ${responseJson.totalItems},
-        Общая цена: ${formatter.format(responseJson.totalPrices)}`;
-        document.querySelector("#price-cel-" + elemIndex).textContent = formatter.format(responseJson.bucketItems[elemIndex].totalPrice);
-    }
-
+    const bucketItems = [[${bucket.getBucketItems()}]];
     document.querySelectorAll(".number-input").forEach(div => {
-        div.querySelector(".quantity").addEventListener("input", changeQuantity);
-        div.querySelector("button:first-of-type").addEventListener("click", changeQuantity);
-        div.querySelector("button:last-of-type").addEventListener("click", changeQuantity);
+        div.querySelector(".quantity").addEventListener("input", e => changeQuantity(e, bucketItems));
+        div.querySelector("button:first-of-type").addEventListener("click", e => changeQuantity(e, bucketItems));
+        div.querySelector("button:last-of-type").addEventListener("click", e => changeQuantity(e, bucketItems));
     });
 </script>
 </body>

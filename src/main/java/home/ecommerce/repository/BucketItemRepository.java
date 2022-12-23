@@ -8,4 +8,5 @@ import java.util.Set;
 
 public interface BucketItemRepository extends CrudRepository<BucketItem, Long> {
     Set<BucketItem> findByBucket(Bucket bucket);
+    void deleteAllByBucket(Bucket bucket);
 }

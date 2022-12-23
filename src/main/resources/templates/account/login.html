@@ -1,33 +1,43 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
-    <title>Login</title>
+    <title>Авторизация</title>
 </head>
 <body class="min-vh-100 d-flex flex-column">
 <header th:replace="~{layout/layouts.html :: menu}"></header>
-<div class="container flex-fill d-flex p-5">
-    <div class="row flex-fill justify-content-center">
-        <div class="col-4">
-            <form th:action="@{/login}" method="post">
-                <h1 class="display-4 text-center">Авторизация</h1>
+<div class="container flex-fill d-flex justify-content-center align-items-center p-5">
+    <div class="col">
+        <div class="row justify-content-center">
+            <div class="col-4 bg-white common-border">
+                <div th:if = "${param.error}" class="text-center alert alert-warning">
+                    Неправильный логин или пароль
+                </div>
 
-                <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
-                <div class="col-12 py-1">
-                    <label for="inputUsername" class="form-label">Логин:</label>
-                    <input class="form-control" id="inputUsername" type="text" name="username">
+                <div th:if = "${param.logout}" class="text-center alert alert-success">
+                    Вы вышли из аккаунта
                 </div>
-                <div class="col-12 py-1">
-                    <label for="inputPassword" class="form-label">Пароль:</label>
-                    <input class="form-control" id="inputPassword" type="password" name="password">
-                </div>
-                <div class="col-12 py-1">
-                    <button type="submit" class="btn btn-success w-100 fw-bold">Войти</button>
-                </div>
-                <div class="col-12 py-1 text-center">
-                    <span>Нет аккаунта? </span>
-                    <a th:href="@{/register}" class="fw-bold link-dark">Зарегистрируйся</a>
-                </div>
-            </form>
+
+                <form th:action="@{/login}" method="post">
+                    <h1 class="display-4 text-center">Авторизация</h1>
+
+                    <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
+                    <div class="col-12 py-1">
+                        <label for="inputUsername" class="form-label">Логин:</label>
+                        <input class="form-control" id="inputUsername" type="text" name="username">
+                    </div>
+                    <div class="col-12 py-1">
+                        <label for="inputPassword" class="form-label">Пароль:</label>
+                        <input class="form-control" id="inputPassword" type="password" name="password">
+                    </div>
+                    <div class="col-12 py-3">
+                        <button type="submit" class="stat-link stat-link-active w-100">Войти</button>
+                    </div>
+                    <div class="col-12 py-2 text-center">
+                        <span>Нет аккаунта? </span>
+                        <a th:href="@{/register}" class="fw-bold">Зарегистрируйся</a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

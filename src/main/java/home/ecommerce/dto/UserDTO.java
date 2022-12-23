@@ -13,14 +13,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class UserDTO {
-    @NotBlank(message = "Enter your username")
+    @NotBlank(message = "Введите ваш логин")
     private String username;
-    @NotBlank(message = "Enter your email")
-    @Email(message = "Enter a valid email address")
+    @NotBlank(message = "Введите ваш емейл")
+    @Email(message = "Введите правильный емейл")
     private String email;
-    @NotBlank(message = "Enter your password")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @NotBlank(message = "Введите ваш пароль")
+    @Size(min = 6, message = "Длина пароля должна быть от 6 символов")
     private String password;
-    @NotBlank(message = "Re-enter your password")
+    @NotBlank(message = "Повторно введите пароль")
     private String rpassword;
 }

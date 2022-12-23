@@ -8,6 +8,7 @@ import home.ecommerce.dto.ProductDTO;
 import home.ecommerce.entity.Image;
 import home.ecommerce.entity.Product;
 import home.ecommerce.entity.Subcategory;
+import home.ecommerce.entity.User;
 import home.ecommerce.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
@@ -184,6 +185,10 @@ public class ProductService {
 
     public Product save(Product product) {
         return productRepository.save(product);
+    }
+
+    public void saveAll(List<Product> products) {
+        productRepository.saveAll(products);
     }
 
     public ProductDTO toDTO(Product product) {

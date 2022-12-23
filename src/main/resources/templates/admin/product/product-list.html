@@ -11,7 +11,7 @@
       <!-- ссылка на добавление нового товара -->
       <div class="col-6 d-flex justify-content-start">
         <span th:if="${subcategoriesCount == 0}" >Добавьте категории пержде чем добавить подкатегории</span>
-        <a th:if="${subcategoriesCount > 0}" th:href="@{/admin/products/new}" class="btn btn-success">
+        <a th:if="${subcategoriesCount > 0}" th:href="@{/admin/products/new}" class="stat-link stat-link-active">
           Добавить
         </a>
       </div>

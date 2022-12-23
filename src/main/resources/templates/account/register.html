@@ -1,54 +1,58 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/layouts.html :: common_head(~{::title}, ~{})}">
-    <title>Registration</title>
+    <title>Регистрация</title>
 </head>
 <body class="bg-color1">
 <header th:replace="~{layout/layouts.html :: menu}"></header>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-4">
-                <form method="post" th:action="@{/register}" th:object="${userDTO}">
-                    <h1 class="display-4 text-center">Регистрация</h1>
+<div class="container p-4">
+    <div class="row justify-content-center">
+        <div class="col-4 bg-white common-border">
+            <form method="post" th:action="@{/register}" th:object="${userDTO}">
+                <h1 class="display-4 text-center">Регистрация</h1>
 
-                    <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
+                <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
 
-                    <div class="col-12 py-1">
-                        <label for="inputUsername" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="inputUsername"
-                               th:field="*{username}" th:errorclass="is-invalid">
-                        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback"></div>
-                    </div>
-                    <div class="col-12 py-1">
-                        <label for="inputEmail" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="inputEmail" placeholder="example@mail.com"
-                               th:field="*{email}" th:errorclass="is-invalid">
-                        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback"></div>
-                    </div>
-                    <div class="col-12 py-1">
-                        <label for="inputPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="inputPassword" placeholder="6 символов минимум"
-                               th:field="*{password}" th:errorclass="is-invalid">
-                        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
-                    </div>
-                    <div class="col-12 py-1">
-                        <label for="inputRPassword" class="form-label">Re-enter password</label>
-                        <input type="password" class="form-control" id="inputRPassword"
-                               th:field="*{rpassword}" th:errorclass="is-invalid">
-                        <div th:if="${#fields.hasErrors('rpassword')}" th:errors="*{rpassword}" class="invalid-feedback"></div>
-                    </div>
-                    <div class="col-12 py-1">
-                        <button type="submit" class="btn btn-success w-100 fw-bold">Зарегистрироваться</button>
-                    </div>
-                    <div class="col-12 py-1 text-center">
-                        <span>Уже есть аккаунт? </span>
-                        <a th:href="@{/login}" class="fw-bold link-dark">Авторизуйся</a>
-                    </div>
+                <div class="col-12 py-1">
+                    <label for="inputUsername" class="form-label">Логин</label>
+                    <input type="text" class="form-control" id="inputUsername"
+                           th:field="*{username}" th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                         class="invalid-feedback"></div>
+                </div>
+                <div class="col-12 py-1">
+                    <label for="inputEmail" class="form-label">Почта</label>
+                    <input type="text" class="form-control" id="inputEmail" placeholder="example@mail.com"
+                           th:field="*{email}" th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback"></div>
+                </div>
+                <div class="col-12 py-1">
+                    <label for="inputPassword" class="form-label">Пароль</label>
+                    <input type="password" class="form-control" id="inputPassword" placeholder="6 символов минимум"
+                           th:field="*{password}" th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                         class="invalid-feedback"></div>
+                </div>
+                <div class="col-12 py-1">
+                    <label for="inputRPassword" class="form-label">Подтвердите пароль</label>
+                    <input type="password" class="form-control" id="inputRPassword"
+                           th:field="*{rpassword}" th:errorclass="is-invalid">
+                    <div th:if="${#fields.hasErrors('rpassword')}" th:errors="*{rpassword}"
+                         class="invalid-feedback"></div>
+                </div>
+                <div class="col-12 py-3">
+                    <button type="submit" class="stat-link stat-link-active w-100 fw-bold">Зарегистрироваться
+                    </button>
+                </div>
+                <div class="col-12 py-2 text-center">
+                    <span>Уже есть аккаунт? </span>
+                    <a th:href="@{/login}" class="fw-bold">Авторизуйся</a>
+                </div>
 
-                </form>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 <script th:src="@{/webjars/bootstrap/5.2.2/dist/js/bootstrap.bundle.js}"></script>
 </body>
 </html>

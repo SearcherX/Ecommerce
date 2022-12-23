@@ -27,7 +27,6 @@ import java.sql.Timestamp;
 @Controller
 @AllArgsConstructor
 public class AccountController {
-    private static final Logger LOG = LoggerFactory.getLogger(AccountController.class);
     private final UserService userService;
     private final BucketService bucketService;
     private final VerificationTokenService verificationTokenService;
@@ -48,18 +47,18 @@ public class AccountController {
     public String save(@Valid UserDTO userDTO, BindingResult bindingResult, RedirectAttributes ra) {
         if (userService.findByUsername(userDTO.getUsername()) != null) {
             bindingResult.addError(new FieldError("userDTO", "username",
-                    "User already in use"));
+                    "Имя уже занятно"));
         }
 
         if (userService.findByEmail(userDTO.getEmail()) != null) {
             bindingResult.addError(new FieldError("userDTO", "email",
-                    "Email already in use"));
+                    "Емейл уже занят"));
         }
 
         if (userDTO.getPassword() != null && userDTO.getRpassword() != null) {
             if (!userDTO.getPassword().equals(userDTO.getRpassword())) {
                 bindingResult.addError(new FieldError("userDTO", "rpassword",
-                        "Password must match"));
+                        "Пароли не совпадают"));
             }
         }
 
@@ -68,7 +67,7 @@ public class AccountController {
         }
 
         ra.addFlashAttribute("message",
-                "Success! A verification email has been sent to your email address");
+                "Успех! Письмо с подтверждением отправлено на ваш почтовый ящик");
         userService.register(userDTO);
         return "redirect:/login";
     }
@@ -77,7 +76,7 @@ public class AccountController {
     public String activation(@RequestParam("token") String token, Model model) {
         VerificationToken verificationToken = verificationTokenService.findByToken(token);
         if (verificationToken == null) {
-            model.addAttribute("message", "Your verification token is invalid");
+            model.addAttribute("message", "Ваш код подтверждения не верен");
         } else {
             User user = verificationToken.getUser();
 
@@ -85,15 +84,15 @@ public class AccountController {
                 Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 
                 if (verificationToken.getExpireDate().before(currentTimestamp)) {
-                    model.addAttribute("message", "Your verification token has expired");
+                    model.addAttribute("message", "Код подтверждения истёк");
                 } else {
                     user.setEnabled(true);
                     userService.save(user);
                     bucketService.getBucket(user);
-                    model.addAttribute("message", "Your account is successfully activated");
+                    model.addAttribute("message", "Ваш аккаун успешно активирован");
                 }
             } else {
-                model.addAttribute("message", "Your account is already activated");
+                model.addAttribute("message", "Ваш акааунт уже активирован");
             }
         }
 

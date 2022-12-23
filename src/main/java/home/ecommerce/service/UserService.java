@@ -1,10 +1,6 @@
 package home.ecommerce.service;
 
-import home.ecommerce.dto.CategoryDTO;
-import home.ecommerce.dto.ProductDTO;
 import home.ecommerce.dto.UserDTO;
-import home.ecommerce.entity.Category;
-import home.ecommerce.entity.Product;
 import home.ecommerce.entity.Role;
 import home.ecommerce.entity.User;
 import home.ecommerce.repository.UserRepository;
@@ -69,7 +65,7 @@ public class UserService {
     }
 
     @Transactional
-    public User register(UserDTO userDTO) {
+    public void register(UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User user = new User();
         modelMapper.map(userDTO, user);
@@ -89,7 +85,7 @@ public class UserService {
             }
         });
 
-        return saved.get();
+        saved.get();
     }
 
     public User add(UserDTO userDTO, Role role) {

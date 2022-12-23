@@ -72,7 +72,11 @@ VALUES ('14.1" Ноутбук Digma EVE 14 C411 серый', 'laptop-digma-eve-1
        ('ПК ASUS ROG Strix G15CE-1170KF0770', 'pc-asus-rog-strix-g15ce-1170kf0770',
         'ПК ASUS ROG Strix G15CE-1170KF0770 [90PF02P2-M005H0] [Intel Core i7-11700F, 8x2.5 ГГц, 32 ГБ DDR4, ' ||
         'GeForce RTX 3080, SSD 1000 ГБ, без ОС]', true, 227999, 20, '2022-12-17',
-        (SELECT id FROM subcategory_t WHERE subcategory_name = 'Персональные компьютеры'));
+        (SELECT id FROM subcategory_t WHERE subcategory_name = 'Персональные компьютеры')),
+
+       ('Монитор AOC E2270SWN черный', 'monitor-aoc-e2270swn-black',
+        '21.5" Монитор AOC E2270SWN черный [1920x1080@60 Гц, TN, 5 мс, 700 : 1, 200 Кд/м², 90°/65°, VGA (D-Sub)]', true, 6999, 20, '2022-12-22',
+        (SELECT id FROM subcategory_t WHERE subcategory_name = 'Периферия'));
 
 
 INSERT INTO image_t (file_name, product_id)
@@ -113,4 +117,7 @@ VALUES ('laptop-digma-eve-14-main.jpg',
         (SELECT id FROM product_t WHERE product_name = 'Видеокарта MSI GeForce RTX 3060 Ti GAMING Z TRIO')),
 
        ('pc-asus-rog-strix-g15ce-1170kf0770-main.jpg',
-        (SELECT id FROM product_t WHERE product_name = 'ПК ASUS ROG Strix G15CE-1170KF0770'));
+        (SELECT id FROM product_t WHERE product_name = 'ПК ASUS ROG Strix G15CE-1170KF0770')),
+
+       ('monitor-aoc-e2270swn-black-main.jpg',
+        (SELECT id FROM product_t WHERE product_name = 'Монитор AOC E2270SWN черный'));

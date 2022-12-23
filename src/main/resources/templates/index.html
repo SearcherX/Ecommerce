@@ -6,10 +6,10 @@
 </head>
 <body class="d-flex flex-column min-vh-100 bg-color1">
 <header th:replace="~{layout/layouts.html :: menu}"></header>
-<div class="container p-4">
+<div class="container p-4 flex-fill">
 
     <div class="row mx-auto justify-content-center col-10">
-        <div id="discountsCarousel" class="carousel carousel-dark slide" data-bs-ride="true">
+        <div id="discountsCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#discountsCarousel"
                         class="active" aria-current="true" data-bs-slide-to="0"
@@ -19,7 +19,7 @@
                         data-bs-slide-to="1" aria-label="Slide 2">
                 </button>
             </div>
-            <div class="carousel-inner h-100">
+            <div class="carousel-inner h-100 common-border p-0">
                 <div class="carousel-item active">
                     <img th:src="@{/img/nw_banner_1_13686_A_1669822275.jpg}" class="img-fluid h-100" alt="" src="">
                 </div>
@@ -43,7 +43,7 @@
     <h2 class="text-center mt-4 ">Популярные товары</h2>
     <div class="row mx-auto mt-4  justify-content-center">
         <div id="popularCarousel" class="carousel multi-frame slide p-2 col-8" data-bs-ride="carousel">
-            <div class="carousel-inner h-100" role="listbox">
+            <div class="carousel-inner h-100 common-border bg-white" role="listbox">
                 <div th:each="product, stat: ${popularProducts}"
                      th:class="|h-100 carousel-item ${stat.index == 0 ? 'active' : ''}|">
                     <div class="col-3 bg-white h-100 carousel-item-slide position-relative">
@@ -70,7 +70,7 @@
     <h2 class="text-center mt-4 ">Новинки</h2>
     <div class="row mx-auto mt-4  justify-content-center">
         <div id="newCarousel" class="carousel multi-frame slide p-2 col-8" data-bs-ride="carousel">
-            <div class="carousel-inner h-100" role="listbox">
+            <div class="carousel-inner h-100 common-border bg-white" role="listbox">
                 <div th:each="product, stat: ${newProducts}"
                      th:class="|h-100 carousel-item ${stat.index == 0 ? 'active' : ''}|">
                     <div class="col-3 bg-white h-100 carousel-item-slide position-relative">

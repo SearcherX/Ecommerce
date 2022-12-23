@@ -7,10 +7,10 @@
 <header th:replace="~{layout/layouts.html :: menu}"></header>
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-4">
+    <div class="col-4 bg-white common-border mt-4">
       <form method="post" th:action="@{/admin/users/save}" th:object="${userDTO}"
             enctype="multipart/form-data">
-        <h3 class="display-4 text-center"
+        <h3 class="text-center"
             th:text="${action == 'create' ? 'Добавить пользователя' : 'Редактировать пользователя'}"></h3>
 
         <div class="alert alert-info text-center" th:if="${message}" th:text="${message}"></div>
@@ -34,7 +34,7 @@
           <label for="inputRole" class="form-label">Роль</label>
           <select id="inputRole" class="form-select" name="role" th:value="${role}">
             <th:block th:each="choseRole: ${rolesList}">
-              <option th:value="${choseRole}">
+              <option th:if="${choseRole.name() != 'ADMIN'}" th:value="${choseRole}">
                 [[${choseRole}]]
               </option>
             </th:block>
@@ -42,7 +42,7 @@
         </div>
         <input type="hidden" name="action" th:value="${action}">
         <input type="hidden" name="id" th:value="${id}">
-        <div class="col-12 py-1">
+        <div class="col-12 py-3">
           <button type="submit" class="btn btn-success fw-bold">Добавить</button>
           <button type="submit" class="btn btn-danger fw-bold">Отмена</button>
         </div>

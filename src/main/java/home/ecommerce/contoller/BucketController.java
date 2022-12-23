@@ -1,7 +1,6 @@
 package home.ecommerce.contoller;
 
 import home.ecommerce.entity.Bucket;
-import home.ecommerce.entity.BucketItem;
 import home.ecommerce.entity.Product;
 import home.ecommerce.entity.User;
 import home.ecommerce.service.BucketService;
@@ -31,6 +30,14 @@ public class BucketController {
         return "bucket/bucket";
     }
 
+    @GetMapping("/checkout")
+    public String checkout(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        bucketService.increasePurchaseNumber(user);
+        bucketService.deleteALl(user);
+        return "bucket/checkout";
+    }
+
     @PostMapping("/add")
     @ResponseBody
     public String addBucket(@RequestParam Long productId, Principal principal) {
@@ -51,6 +58,13 @@ public class BucketController {
     public String delProduct(@PathVariable Long id, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         bucketService.deleteItemFromBucket(id, user);
+        return "redirect:/bucket";
+    }
+
+    @GetMapping("/delete")
+    public String delAllProducts(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        bucketService.deleteALl(user);
         return "redirect:/bucket";
     }
 }

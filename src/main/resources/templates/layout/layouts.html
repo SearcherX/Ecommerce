@@ -22,9 +22,6 @@
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/catalog}">Товары</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Скидки</a>
-                        </li>
                     </ul>
                 </div>
                 <div class="order-sm-4 w-100 d-none d-sm-block"></div>
@@ -50,12 +47,8 @@
                                 </li>
                                 <li sec:authorize="isAnonymous()"><a th:href="@{/register}" class="dropdown-item">Регистрация</a>
                                 </li>
-
                                 <li sec:authorize="isAuthenticated()"><a th:href="@{/bucket}" class="dropdown-item">Корзина</a>
-                                </li>
-                                <li sec:authorize="isAuthenticated()"><a href="#" class="dropdown-item">Настройки</a>
-                                </li>
-                                <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin}" class="dropdown-item">Админка</a>
+                                <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/users}" class="dropdown-item">Админка</a>
                                 </li>
                                 <li sec:authorize="isAuthenticated()">
                                     <form th:action="@{/logout}" method="post">

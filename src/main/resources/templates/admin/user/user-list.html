@@ -10,7 +10,7 @@
         <div class="row mb-2">
             <!-- ссылка на добавление нового пользователя -->
             <div class="col-6 d-flex justify-content-start">
-                <a th:href="@{/admin/users/new}" class="btn btn-success">
+                <a th:href="@{/admin/users/new}" class="stat-link stat-link-active">
                     Добавить
                 </a>
             </div>
@@ -31,7 +31,7 @@
                     <td>[[${user.id}]]</td>
                     <td>[[${user.username}]]</td>
                     <td>[[${user.role}]]</td>
-                    <td th:if="${user.username != #authentication.getName()}">
+                    <td th:if="${user.role.name() != 'ADMIN'}">
                         <div class="dropdown">
                             <button class="btn btn-primary dropdown-toggle" type="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
