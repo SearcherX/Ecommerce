@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: "webshop_db"
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "Matrix12_"
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "unexcite2@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "Matrix12_"
+    ports:
+      - "5050:80"

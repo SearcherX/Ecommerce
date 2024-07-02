@@ -38,7 +38,6 @@ public class SecurityConfig {
                 .formLogin()
                 .loginPage("/login")
                 .successHandler(successHandler())
-//                        .defaultSuccessUrl("/", true)
                 .permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/").and().cors().and().csrf().disable();
